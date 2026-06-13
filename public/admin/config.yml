@@ -92,6 +92,12 @@ collections:
         file: src/content/sections/contact.md
         format: frontmatter
         fields:
+          - { label: "Section Badge", name: "badge", widget: "string", default: "Contact Us" }
+          - { label: "Section Title", name: "title", widget: "string", default: "Get in touch with us" }
+          - { label: "Section Description", name: "description", widget: "text", default: "We eagerly look forward to warmly welcoming you very soon to our event. It promises to be a memorable experience filled with exciting activities." }
+          - { label: "Section Image", name: "image", widget: "image", default: "/images/contact-us-01.webp" }
+          - { label: "Right Side Title", name: "rightTitle", widget: "string", default: "We're here to serve you" }
+          - { label: "Right Side Description", name: "rightDescription", widget: "text", default: "We would love to hear from you, Whether you have a question, need a reservation, or want to learn more about our offerings, we're here to assist." }
           - label: Contact Cards
             name: contact
             widget: list

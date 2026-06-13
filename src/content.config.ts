@@ -47,9 +47,11 @@ const sections = defineCollection({
       userComment: z.string(),
       userAvatar: z.string()
     })).optional(),
-    badge: z.string().default('About Us').optional(),
+    badge: z.string().optional(),
     readMoreLink: z.string().default('#').optional(),
     image: z.string().optional(),
+    rightTitle: z.string().optional(),
+    rightDescription: z.string().optional(),
     stats: z.array(z.object({
       value: z.string(),
       line1: z.string(),

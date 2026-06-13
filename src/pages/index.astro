@@ -250,7 +250,14 @@ const schema = {
       </div>
     )
   )}
-  
-  <ContactUs contactInfo={contactInfo} />
+  <ContactUs 
+    badge={contactEntry?.data.badge}
+    title={contactEntry?.data.title}
+    description={contactEntry?.data.description}
+    image={contactEntry?.data.image}
+    rightTitle={contactEntry?.data.rightTitle}
+    rightDescription={contactEntry?.data.rightDescription}
+    contactInfo={contactInfo} 
+  />
   <Offers galleryImage={galleryImage} />
 </Layout>

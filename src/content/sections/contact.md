@@ -1,4 +1,10 @@
 ---
+badge: "Contact Us"
+title: "Get in touch with us"
+description: "We eagerly look forward to warmly welcoming you very soon to our event. It promises to be a memorable experience filled with exciting activities."
+image: "/images/contact-us-01.webp"
+rightTitle: "We're here to serve you"
+rightDescription: "We would love to hear from you, Whether you have a question, need a reservation, or want to learn more about our offerings, we're here to assist."
 contact:
   - title: "Open Hours"
     description: "Monday-Friday\n8:00 am to 5:00 pm"
