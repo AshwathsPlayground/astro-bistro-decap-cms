@@ -5,23 +5,16 @@ import { z } from 'astro/zod'
 const blog = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
   schema: z.object({
-    id: z.number(),
-    slug: z.string(),
     title: z.string(),
+    img: z.string(),
+    alt: z.string(),
     description: z.string(),
-    imageUrl: z.string().optional(),
-    imageAlt: z.string().optional(),
-    pubDate: z.string(),
-    author: z.string().default('shadcn Studio'),
-    avatarUrl: z.string().optional(),
-    category: z.string().default('General'),
-    tags: z.array(z.string()).default([]),
-    featured: z.boolean().default(false)
+    blogLink: z.string().default('#')
   })
 })
 
-const slides = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/slides' }),
+const heroSlides = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/hero-slides' }),
   schema: z.object({
     title: z.string(),
     id: z.number(),
@@ -32,8 +25,8 @@ const slides = defineCollection({
   })
 })
 
-const products = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/products' }),
+const features = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/features' }),
   schema: z.object({
     title: z.string(),
     image: z.string(),
@@ -43,5 +36,43 @@ const products = defineCollection({
   })
 })
 
-export const collections = { blog, slides, products }
+const testimonials = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/testimonials' }),
+  schema: z.object({
+    title: z.string(),
+    avatar: z.string(),
+    rating: z.number(),
+    content: z.string()
+  })
+})
 
+const pages = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/pages' }),
+  schema: z.object({
+    hero: z.object({
+      title: z.string(),
+      description: z.string()
+    }),
+    about: z.object({
+      badge: z.string().default('About Us'),
+      title: z.string(),
+      description: z.string(),
+      readMoreLink: z.string().default('#'),
+      image: z.string(),
+      stats: z.array(z.object({
+        value: z.string(),
+        line1: z.string(),
+        line2: z.string(),
+        icon: z.string()
+      }))
+    })
+  })
+})
+
+export const collections = { 
+  blog, 
+  'hero-slides': heroSlides, 
+  features,
+  testimonials,
+  pages
+}
