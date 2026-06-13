@@ -11,7 +11,23 @@ type Stat = {
   description: string[]
 }
 
-const AboutUs = ({ stats }: { stats: Stat[] }) => {
+type AboutUsProps = {
+  stats: Stat[]
+  badge?: string
+  title?: string
+  description?: string
+  readMoreLink?: string
+  image?: string
+}
+
+const AboutUs = ({
+  stats,
+  badge = 'About Us',
+  title = 'Our story & achievements',
+  description = "At Restaurant, every dish tells a story. With years of dedication and a passion for fine dining, we've transformed the art of cooking into an unforgettable experience.",
+  readMoreLink = '#',
+  image = '/images/about-us.webp'
+}: AboutUsProps) => {
   return (
     <section
       id='about-us'
@@ -21,19 +37,18 @@ const AboutUs = ({ stats }: { stats: Stat[] }) => {
         {/* Header */}
         <div className='mx-auto mb-12 flex max-w-3xl flex-col items-center justify-center space-y-4 text-center md:mb-16 lg:mb-24'>
           <Badge variant='outline' className='h-auto text-sm font-normal'>
-            About Us
+            {badge}
           </Badge>
-          <h2 className='text-2xl font-semibold tracking-tight md:text-3xl lg:text-4xl'>Our story & achievements</h2>
+          <h2 className='text-2xl font-semibold tracking-tight md:text-3xl lg:text-4xl'>{title}</h2>
           <p className='text-muted-foreground text-xl'>
-            At Restaurant, every dish tells a story. With years of dedication and a passion for fine dining, we&apos;ve
-            transformed the art of cooking into an unforgettable experience.
+            {description}
           </p>
           <Button
             size='lg'
             asChild
             className='group relative w-fit overflow-hidden rounded-full text-base before:absolute before:inset-0 before:rounded-[inherit] before:bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.5)_50%,transparent_75%,transparent_100%)] before:bg-[length:250%_250%,100%_100%] before:bg-[position:200%_0,0_0] before:bg-no-repeat before:transition-[background-position_0s_ease] before:duration-1000 hover:before:bg-[position:-100%_0,0_0] has-[>svg]:px-6 dark:before:bg-[linear-gradient(45deg,transparent_25%,rgba(0,0,0,0.2)_50%,transparent_75%,transparent_100%)]'
           >
-            <a href='#'>
+            <a href={readMoreLink}>
               Read more
               <ArrowRightIcon className='transition-transform duration-200 group-hover:translate-x-0.5' />
             </a>
@@ -43,7 +58,7 @@ const AboutUs = ({ stats }: { stats: Stat[] }) => {
         {/* Video player and stats */}
         <div className='relative mb-8 h-full w-full sm:mb-16 lg:mb-24'>
           <img
-            src='/images/about-us.webp'
+            src={image}
             alt='About us illustration'
             className='h-full w-full object-cover'
             loading='lazy'
@@ -54,7 +69,7 @@ const AboutUs = ({ stats }: { stats: Stat[] }) => {
             {stats.map((stat, index) => (
               <div key={index} className='flex flex-col items-center justify-center gap-2.5 text-center'>
                 <div className='flex size-7 items-center justify-center [&>svg]:size-7'>
-                  <stat.icon />
+                  {stat.icon && <stat.icon />}
                 </div>
                 <span className='text-2xl font-semibold'>{stat.value}</span>
                 <p className='text-muted-foreground text-lg'>
