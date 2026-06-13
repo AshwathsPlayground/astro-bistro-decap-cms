@@ -93,8 +93,81 @@ const stats = aboutData.stats && aboutData.stats.length > 0
     }))
   : []
 
-import { contactInfo } from '@/assets/data/contact-us'
-import { GalleryImage } from '@/assets/data/offers'
+// Fetch dynamic contact info
+const contactInfoData = homePage?.data.contact ?? [
+  {
+    title: 'Open Hours',
+    icon: 'Clock8Icon',
+    description: 'Monday-Friday\n8:00 am to 5:00 pm'
+  },
+  {
+    title: 'Our Address',
+    icon: 'MapPinIcon',
+    description: '802 Perston Rd,Maine\n96812, USA'
+  },
+  {
+    title: 'Email',
+    icon: 'Mail',
+    description: 'info@seliziakitchen.com'
+  },
+  {
+    title: 'Phone',
+    icon: 'PhoneIcon',
+    description: '+1 (123) 456-7890'
+  }
+]
+
+const contactInfo = contactInfoData.map(info => ({
+  title: info.title,
+  description: info.description,
+  icon: iconMap[info.icon] ?? iconMap.PhoneIcon
+}))
+
+// Fetch dynamic promotions content
+const galleryImage = homePage?.data.promotions ?? [
+  {
+    src: '/images/offers/offers-image-01.webp',
+    alt: 'Launch deal',
+    className: 'col-span-2 row-span-2',
+    offerText: {
+      text: 'Lunch Deal - $9.99',
+      className: 'xl:top-6 xl:right-6 top-3 right-3'
+    },
+    offerButton: {
+      text: 'Book your table',
+      link: '#',
+      className: 'xl:top-19.5 xl:right-6 top-12 right-3'
+    }
+  },
+  {
+    src: '/images/offers/offers-image-02.webp',
+    alt: 'Bogo special',
+    className: 'col-span-2 max-h-60',
+    offerText: {
+      text: 'BOGO Special',
+      className: 'xl:bottom-18.5 xl:left-4 bottom-13 left-3'
+    },
+    offerButton: {
+      text: 'Claim offer',
+      link: '#',
+      className: 'xl:bottom-5 xl:left-4 bottom-2 left-3'
+    }
+  },
+  {
+    src: '/images/offers/offers-image-03.webp',
+    alt: 'Family meal',
+    className: 'col-span-2 max-h-60',
+    offerText: {
+      text: 'Family Meal – $29.99',
+      className: 'xl:top-5 xl:right-12 top-3 right-3'
+    },
+    offerButton: {
+      text: 'Book your table',
+      link: '#',
+      className: 'xl:top-19 xl:right-12 top-11 right-3'
+    }
+  }
+]
 
 // Page-specific SEO configuration
 const pageTitle = ''
@@ -177,5 +250,5 @@ const schema = {
   )}
   
   <ContactUs contactInfo={contactInfo} />
-  <Offers galleryImage={GalleryImage} />
+  <Offers galleryImage={galleryImage} />
 </Layout>
