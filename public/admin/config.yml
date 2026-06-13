@@ -1,0 +1,121 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: public/images/uploads
+public_folder: /images/uploads
+
+collections:
+  - name: heroSlides
+    label: Hero Slides
+    folder: src/content/heroSlides
+    create: true
+    format: frontmatter
+    identifier_field: title
+    fields:
+      - { label: "Slide Identifier (e.g. Slide 1)", name: "title", widget: "string" }
+      - { label: "Display Order ID", name: "id", widget: "number", value_type: "int" }
+      - { label: "Dish Image", name: "img", widget: "image" }
+      - { label: "Image Alt Text", name: "imgAlt", widget: "string" }
+      - { label: "User Comment", name: "userComment", widget: "text" }
+      - { label: "User Avatar", name: "userAvatar", widget: "image" }
+
+  - name: dishes
+    label: Popular Dishes
+    folder: src/content/dishes
+    create: true
+    format: frontmatter
+    fields:
+      - { label: "Dish Name", name: "title", widget: "string" }
+      - { label: "Dish Image", name: "image", widget: "image" }
+      - { label: "Image Alt Text", name: "alt", widget: "string" }
+      - { label: "Dish Category / Type (e.g. Main course 🥘)", name: "type", widget: "string" }
+      - { label: "Description", name: "description", widget: "text" }
+
+  - name: testimonials
+    label: Testimonials
+    folder: src/content/testimonials
+    create: true
+    format: frontmatter
+    fields:
+      - { label: "Customer Name", name: "title", widget: "string" }
+      - { label: "Avatar Image", name: "avatar", widget: "image" }
+      - { label: "Rating (1 to 5)", name: "rating", widget: "number", value_type: "float", min: 1, max: 5, step: 0.5 }
+      - { label: "Review Content", name: "content", widget: "text" }
+
+  - name: newItems
+    label: New Menu Items
+    folder: src/content/newItems
+    create: true
+    format: frontmatter
+    fields:
+      - { label: "Item Title", name: "title", widget: "string" }
+      - { label: "Item Image", name: "img", widget: "image" }
+      - { label: "Image Alt Text", name: "alt", widget: "string" }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Learn More Link (Blog)", name: "blogLink", widget: "string", default: "#" }
+
+  - name: pages
+    label: Pages
+    files:
+      - name: home
+        label: Home Page Settings
+        file: src/content/pages/home.md
+        format: frontmatter
+        fields:
+          - label: Hero Headings
+            name: hero
+            widget: object
+            fields:
+              - { label: "Main Title", name: "title", widget: "string" }
+              - { label: "Subheading / Description", name: "description", widget: "text" }
+          - label: About Us Section
+            name: aboutUs
+            widget: object
+            fields:
+              - { label: "Section Badge", name: "badge", widget: "string", default: "About Us" }
+              - { label: "Section Title", name: "title", widget: "string" }
+              - { label: "Section Description", name: "description", widget: "text" }
+              - { label: "Read More Link", name: "readMoreLink", widget: "string", default: "#" }
+              - { label: "About Image", name: "image", widget: "image" }
+              - label: Achievements Stats
+                name: stats
+                widget: list
+                fields:
+                  - { label: "Stat Value (e.g. 20+)", name: "value", widget: "string" }
+                  - { label: "Line 1 Description", name: "line1", widget: "string" }
+                  - { label: "Line 2 Description", name: "line2", widget: "string" }
+                  - label: Icon
+                    name: icon
+                    widget: select
+                    options: ["SparklesIcon", "ChefHat", "Users", "Trophy"]
+          - label: Contact Us Section
+            name: contactUs
+            widget: list
+            fields:
+              - { label: "Card Title", name: "title", widget: "string" }
+              - { label: "Description (Use \\n for line breaks)", name: "description", widget: "text" }
+              - label: Icon
+                name: icon
+                widget: select
+                options: ["Clock8Icon", "MapPinIcon", "Mail", "PhoneIcon"]
+          - label: Offers Section
+            name: offers
+            widget: list
+            fields:
+              - { label: "Promo Image", name: "src", widget: "image" }
+              - { label: "Alt Text", name: "alt", widget: "string" }
+              - { label: "Grid Size Class", name: "className", widget: "select", options: ["col-span-2 row-span-2", "col-span-2 max-h-60"] }
+              - label: Offer Title Text
+                name: offerText
+                widget: object
+                fields:
+                  - { label: "Text", name: "text", widget: "string" }
+                  - { label: "Class Styling", name: "className", widget: "string" }
+              - label: Offer Action Button
+                name: offerButton
+                widget: object
+                fields:
+                  - { label: "Button Text", name: "text", widget: "string" }
+                  - { label: "Button Link", name: "link", widget: "string" }
+                  - { label: "Class Styling", name: "className", widget: "string" }
