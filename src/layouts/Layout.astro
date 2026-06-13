@@ -30,6 +30,7 @@ const seoProps = Astro.props as Props
   <head>
     <HeadSeo {...seoProps} />
     <ClientRouter />
+    <script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script is:inline>
       ;(function () {
         const getTheme = () => {
@@ -75,5 +76,16 @@ const seoProps = Astro.props as Props
 
       <Footer client:load />
     </div>
+    <script is:inline>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on('init', (user) => {
+          if (!user) {
+            window.netlifyIdentity.on('login', () => {
+              document.location.href = '/admin/'
+            })
+          }
+        })
+      }
+    </script>
   </body>
 </html>
