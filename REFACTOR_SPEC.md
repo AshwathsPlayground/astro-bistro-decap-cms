@@ -32,9 +32,9 @@ To make this repository a bulletproof **reusable template** that others can adop
 
 ### A. Graceful UI Fallbacks (No Crashes on Empty State)
 When a user boots up this template for their own business, they may want to delete all our mock products and reviews. The website must not crash.
-* **Collections Check**: For every folder-based collection (Products, Testimonials, Slides), components will check if `collection.length === 0`.
+* **Collections Check**: For every folder-based collection (Features, Testimonials, Slides), components will check if `collection.length === 0`.
 * **Behavior**: 
-  * If a list is empty in production, the corresponding UI section will **gracefully hide** or collapse so the website looks complete.
+  * If a list is empty in production, the corresponding UI section will **gracefully hide** or collapse so the website looks clean and complete.
   * In local development mode (`import.meta.env.DEV`), we will render a helpful developer notice: *"No items found. Go to /admin to add some!"*
 
 ### B. Media and Assets
@@ -53,32 +53,91 @@ Decap CMS stores icons as simple strings (e.g. `"ChefHat"`, `"Mail"`).
 We will execute this refactor across four isolated branches/PRs to discuss, code, and test each section incrementally.
 
 ### Phase 1 (PR #1): CMS Infrastructure & Netlify Auth Setup
-* **Branch**: `feat/cms-infrastructure`
+* **Branch**: `feat/cms-infrastructure` (Merged)
 * **Goal**: Establish the admin panel and auth wiring.
-* **Files Affected**:
-  * Create `netlify.toml` with build settings.
-  * Create `public/admin/index.html` (admin shell).
-  * Create `public/admin/config.yml` (CMS generic collection layouts: `slides`, `products`, `testimonials`, `articles`, `pages/home`).
-  * Modify `src/layouts/Layout.astro` to embed the Netlify Identity widget and redirect scripts.
-* **Verification**: Verify `/admin/index.html` displays the login widget locally and compiling the project runs successfully.
 
-### Phase 2 (PR #2): Slides & Products Collections
+### Phase 2 (PR #2): Slides & Features Collections
 * **Branch**: `feat/slides-products-collections`
-* **Goal**: Refactor the Hero slider and Products grid.
+* **Goal**: Refactor the Hero slider and Features card grid.
+* **Content Schema Examples**:
+  * **Hero Slides (`src/content/hero-slides/slide-1.md`)**:
+    ```yaml
+    ---
+    title: "Slide 1"
+    id: 1
+    img: "/images/hero-section/dish-01.webp"
+    imgAlt: "plate-1"
+    userComment: "The ambiance is perfect and the food is absolutely delicious. Highly recommended!"
+    userAvatar: "/images/hero-section/avatar-01.webp"
+    ---
+    ```
+  * **Features (`src/content/features/grilled-herb-chicken.md`)**:
+    ```yaml
+    ---
+    title: "Grilled Herb Chicken"
+    image: "/images/popular-dishes/grilled-herb-chicken.webp"
+    alt: "Grilled Herb Chicken"
+    type: "Main course 🥘"
+    description: "Juicy chicken grilled with herbs and served with garlic sauce."
+    ---
+    ```
 * **Files Affected**:
-  * Modify `src/content.config.ts` to define Zod schemas for `slides` and `products`.
-  * Create markdown entries under `src/content/slides/` and `src/content/products/` matching the current template content.
-  * Modify `src/pages/index.astro` to load these collections dynamically.
-  * Refactor components (`HeroSection`, `PopularDishes`) to handle empty lists safely.
-* **Verification**: Ensure Hero and Products sections look identical to the baseline, and hide correctly if markdown files are removed.
+  * Modify [content.config.ts](file:///Users/ashwath/projects/shadcn-astro-bistro-landing-page-free/src/content.config.ts) to define Zod schemas for `hero-slides` and `features` collections.
+  * Create markdown entries under `src/content/hero-slides/` and `src/content/features/` matching the current template content.
+  * Modify [index.astro](file:///Users/ashwath/projects/shadcn-astro-bistro-landing-page-free/src/pages/index.astro) to load these collections dynamically using Astro's `getCollection()`.
+  * Refactor components (`HeroSection`, `PopularDishes`) to handle empty lists safely (gracefully hiding the section in production and showing helper text in development).
+* **Verification**: Ensure Hero and Features sections look identical to the baseline, and hide/warn correctly if markdown files are removed.
 
-### Phase 3 (PR #3): About Section, Testimonials & Articles
+### Phase 3 (PR #3): About Section, Testimonials & Blog
 * **Branch**: `feat/about-testimonials-articles`
-* **Goal**: Refactor sections with icons (About section achievements stats), customer reviews, and article cards.
+* **Goal**: Refactor sections with icons (About section achievements stats), customer reviews, and blog cards.
+* **Content Schema Examples**:
+  * **Testimonials (`src/content/testimonials/sarah-johnson.md`)**:
+    ```yaml
+    ---
+    title: "Sarah Johnson"
+    avatar: "/images/hero-section/avatar-03.webp"
+    rating: 5
+    content: "Delicious food made with care and fresh ingredients. The atmosphere is cozy."
+    ---
+    ```
+  * **Blog Post (`src/content/blog/spicy-mango-chicken.md`)**:
+    ```yaml
+    ---
+    title: "Spicy Mango Chicken"
+    img: "/images/new-items/new-items-02.webp"
+    alt: "Spicy Mango Chicken"
+    description: "A sweet and spicy fusion of tender chicken breast combined with ripe mango."
+    blogLink: "#"
+    ---
+    ```
+  * **Home Page Settings (`src/content/pages/home.md`)**:
+    ```yaml
+    ---
+    hero:
+      title: "Savor the taste of perfection"
+      description: "Welcome to Restaurant where passion meets the plate."
+    about:
+      badge: "About Us"
+      title: "Our story & achievements"
+      description: "At Restaurant, every dish tells a story."
+      readMoreLink: "#"
+      image: "/images/about-us.webp"
+      stats:
+        - value: "20+"
+          line1: "Years of Culinary"
+          line2: "Expertise"
+          icon: "SparklesIcon"
+        - value: "70+"
+          line1: "Signature Dishes"
+          line2: "Perfected"
+          icon: "ChefHat"
+    ---
+    ```
 * **Files Affected**:
   * Create `src/utils/icons.ts` for Lucide React dynamic lookup mapping.
-  * Modify `src/content.config.ts` for testimonials, articles, and about schemas.
-  * Create markdown files for testimonies, stats, and articles.
+  * Modify `src/content.config.ts` for testimonials, blog, and about schemas.
+  * Create markdown files for testimonies, stats, and blog posts.
   * Refactor `AboutUs`, `Testimonials`, and `NewItems` components to use generic schemas and data sources.
 * **Verification**: Verify icon mapping works correctly and reviewers ratings are type-safe.
 
@@ -86,7 +145,7 @@ We will execute this refactor across four isolated branches/PRs to discuss, code
 * **Branch**: `feat/contact-promotions-cleanup`
 * **Goal**: Migrate remaining layout details (hours, phone, address cards, promotions grid graphics) and perform final verification.
 * **Files Affected**:
-  * Define schemas for contact data and promotions layout.
+  * Define schemas for contact data and promotions layout inside `src/content.config.ts` and `src/content/pages/home.md`.
   * Build final markdown pages.
   * Modify components (`ContactUs`, `Offers`) to load dynamic coordinates and promotions data.
 * **Verification**: Run `npm run check-types` and `npm run build` to verify there are no compilation errors.
