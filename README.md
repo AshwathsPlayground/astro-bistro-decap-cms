@@ -10,9 +10,12 @@
    </a>
 </h1>
 
-<p align="start">Bistro is a free, responsive Astro landing page template crafted for restaurants, cafés, and bistros. It showcases menus, featured dishes, offers, reservation CTAs, location, and testimonials with clean, modern design.</p>
+<p align="start">Bistro is a free, responsive Astro landing page template crafted for restaurants, cafés, and bistros. It showcases menus, featured dishes, offers, reservation CTAs, location, and testimonials with clean, modern design — and comes with a fully integrated <strong>Decap CMS</strong> admin panel so content editors can update every section without touching code.</p>
 
-![GitHub](https://img.shields.io/github/license/shadcnstudio/shadcn-astro-bistro-landing-page-free) ![GitHub issues](https://img.shields.io/github/issues/shadcnstudio/shadcn-astro-bistro-landing-page-free) ![GitHub closed issues](https://img.shields.io/github/issues-closed/shadcnstudio/shadcn-astro-bistro-landing-page-free) ![Twitter Follow](https://img.shields.io/twitter/follow/ShadcnStudio?style=social)
+[![Use this template](https://img.shields.io/badge/Use%20this%20template-2ea44f?style=for-the-badge&logo=github)](https://github.com/AshwathsPlayground/astro-bistro-decap-cms/generate)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/AshwathsPlayground/astro-bistro-decap-cms)
+
+![GitHub](https://img.shields.io/github/license/AshwathsPlayground/astro-bistro-decap-cms) ![GitHub issues](https://img.shields.io/github/issues/AshwathsPlayground/astro-bistro-decap-cms)
 
 <kbd>[![Bistro - Demo Screenshot](https://cdn.shadcnstudio.com/ss-assets/landing-page/template-page/template-detail-page/landing-page/bistro/og-image.png)](https://shadcnstudio.com/templates/bistro-restaurant-template-free)</kbd>
 
@@ -42,6 +45,9 @@ Bistro is built with Astro and Tailwind CSS, offering a production-ready landing
 - **Tailwind CSS** - Easy theming and utility-based styling
 - **Responsive & Mobile-First** - Designed to look great on all devices
 - **Accessible Components** - Semantic markup and accessible UI patterns
+- **Decap CMS Integration** - Full admin panel at `/admin/` with styled live previews for every content section
+- **Git-based Content** - All content stored as Markdown files in `src/content/`, versioned alongside your code
+- **Zero Serverless Cost** - CMS admin is a static page; no Netlify Functions or compute credits consumed
 
 ## Page Structure & Sections
 
@@ -225,6 +231,58 @@ shadcn-studio-astro-template/
    ```bash
    pnpm run preview
    ```
+
+---
+
+## 🚀 Getting Started from Template
+
+This repository is a **GitHub Template**. Click the button below to create your own copy:
+
+[![Use this template](https://img.shields.io/badge/Use%20this%20template-2ea44f?style=for-the-badge&logo=github)](https://github.com/AshwathsPlayground/astro-bistro-decap-cms/generate)
+
+### 1. Create Your Repository
+
+Click **"Use this template"** → **"Create a new repository"** on GitHub. Give it a name and choose Public or Private.
+
+### 2. Deploy to Netlify
+
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/AshwathsPlayground/astro-bistro-decap-cms)
+
+Or manually:
+1. Log in to [Netlify](https://netlify.com) and click **"Add new site" → "Import an existing project"**.
+2. Connect to your new GitHub repository.
+3. Set the **Build command** to `pnpm build` and **Publish directory** to `dist`.
+
+### 3. Enable Netlify Identity
+
+The CMS admin panel at `/admin/` is protected by [Netlify Identity](https://docs.netlify.com/security/secure-access-to-sites/identity/).
+
+1. Go to your Netlify site dashboard → **Integrations** → **Identity** → **Enable Identity**.
+2. Under **Registration**, set it to **Invite only** (critical — prevents public signups from getting write access to your repo).
+3. Under **Git Gateway**, click **Enable Git Gateway** so the CMS can commit content changes back to GitHub.
+4. Invite yourself: **Identity** → **Invite users** → enter your email → accept the email invite.
+
+### 4. Customize Your Content
+
+Once deployed, visit `https://your-site.netlify.app/admin/` and log in with your Netlify Identity account.
+
+You can edit:
+
+| Section | What you can change |
+|---|---|
+| **Hero** | Title, description, and all carousel slides (image, comment, avatar) |
+| **About** | Badge, title, description, image, and achievement stats |
+| **Contact** | Badge, title, description, illustration image, and all contact cards |
+| **Promotions** | Gallery images, offer text, and CTA button for each promotion |
+| **Features** | Add/edit/delete popular dish cards |
+| **Testimonials** | Add/edit/delete customer review cards |
+| **Blog / New Items** | Add/edit/delete blog and new menu item cards |
+
+### 5. Customise Site Metadata
+
+Edit [`src/consts.ts`](./src/consts.ts) to update the site name, SEO description, author, and social links before your first deploy.
+
+---
 
 ## 🧞 Available Commands
 
