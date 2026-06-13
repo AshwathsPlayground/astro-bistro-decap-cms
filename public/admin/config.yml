@@ -8,19 +8,6 @@ media_folder: public/images/uploads
 public_folder: /images/uploads
 
 collections:
-  - name: hero-slides
-    label: Hero Slides
-    folder: src/content/hero-slides
-    create: true
-    format: frontmatter
-    identifier_field: title
-    fields:
-      - { label: "Slide Identifier (e.g. Slide 1)", name: "title", widget: "string" }
-      - { label: "Display Order ID", name: "id", widget: "number", value_type: "int" }
-      - { label: "Image", name: "img", widget: "image" }
-      - { label: "Image Alt Text", name: "imgAlt", widget: "string" }
-      - { label: "User Comment", name: "userComment", widget: "text" }
-      - { label: "User Avatar", name: "userAvatar", widget: "image" }
 
   - name: features
     label: Features / Cards
@@ -67,6 +54,16 @@ collections:
         fields:
           - { label: "Main Title", name: "title", widget: "string" }
           - { label: "Subheading / Description", name: "description", widget: "text" }
+          - label: Hero Slides
+            name: slides
+            widget: list
+            fields:
+              - { label: "Slide Identifier (e.g. Slide 1)", name: "title", widget: "string" }
+              - { label: "Display Order ID", name: "id", widget: "number", value_type: "int" }
+              - { label: "Image", name: "img", widget: "image" }
+              - { label: "Image Alt Text", name: "imgAlt", widget: "string" }
+              - { label: "User Comment", name: "userComment", widget: "text" }
+              - { label: "User Avatar", name: "userAvatar", widget: "image" }
 
       - name: about
         label: About Section

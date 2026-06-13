@@ -13,18 +13,6 @@ const blog = defineCollection({
   })
 })
 
-const heroSlides = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/hero-slides' }),
-  schema: z.object({
-    title: z.string(),
-    id: z.number(),
-    img: z.string(),
-    imgAlt: z.string(),
-    userComment: z.string(),
-    userAvatar: z.string()
-  })
-})
-
 const features = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/features' }),
   schema: z.object({
@@ -51,6 +39,14 @@ const sections = defineCollection({
   schema: z.object({
     title: z.string().optional(),
     description: z.string().optional(),
+    slides: z.array(z.object({
+      title: z.string(),
+      id: z.number(),
+      img: z.string(),
+      imgAlt: z.string(),
+      userComment: z.string(),
+      userAvatar: z.string()
+    })).optional(),
     badge: z.string().default('About Us').optional(),
     readMoreLink: z.string().default('#').optional(),
     image: z.string().optional(),
@@ -84,7 +80,6 @@ const sections = defineCollection({
 
 export const collections = { 
   blog, 
-  'hero-slides': heroSlides, 
   features,
   testimonials,
   sections

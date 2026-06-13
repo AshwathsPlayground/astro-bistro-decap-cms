@@ -8,18 +8,25 @@ import NewItems from '@/components/blocks/new-items-section/new-items'
 import ContactUs from '@/components/blocks/contact-us-section/contact-us-page'
 import Offers from '@/components/blocks/offers-section/offers-section'
 
-import { getCollection } from 'astro:content'
+import { getCollection, getEntry } from 'astro:content'
+import { iconMap } from '@/utils/icons'
 
-// Fetch dynamic slides content
-const slidesRaw = await getCollection('hero-slides')
+// Fetch sections content from separate files
+const heroEntry = await getEntry('sections', 'hero')
+const aboutEntry = await getEntry('sections', 'about')
+const contactEntry = await getEntry('sections', 'contact')
+const promotionsEntry = await getEntry('sections', 'promotions')
+
+// Fetch dynamic slides content directly from combined hero entry
+const slidesRaw = heroEntry?.data.slides ?? []
 const menudata = slidesRaw.length > 0
   ? slidesRaw
       .map(slide => ({
-        id: slide.data.id,
-        img: slide.data.img,
-        imgAlt: slide.data.imgAlt,
-        userAvatar: slide.data.userAvatar,
-        userComment: slide.data.userComment
+        id: slide.id,
+        img: slide.img,
+        imgAlt: slide.imgAlt,
+        userAvatar: slide.userAvatar,
+        userComment: slide.userComment
       }))
       .sort((a, b) => a.id - b.id)
   : [
@@ -41,8 +48,6 @@ const popularDishes = productsRaw.map(product => ({
   type: product.data.type,
   description: product.data.description
 }))
-import { getEntry } from 'astro:content'
-import { iconMap } from '@/utils/icons'
 
 // Fetch dynamic testimonials content
 const testimonialsRaw = await getCollection('testimonials')
@@ -66,12 +71,6 @@ const newItems = blogRaw.length > 0
       blogLink: item.data.blogLink
     }))
   : []
-
-// Fetch sections content from separate files
-const heroEntry = await getEntry('sections', 'hero')
-const aboutEntry = await getEntry('sections', 'about')
-const contactEntry = await getEntry('sections', 'contact')
-const promotionsEntry = await getEntry('sections', 'promotions')
 
 const heroData = {
   title: heroEntry?.data.title ?? "Savor the taste of perfection",
