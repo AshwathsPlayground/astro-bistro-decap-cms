@@ -128,8 +128,10 @@ This project showcases a complete business website with sections for Header, Her
 ```text
 shadcn-studio-astro-template/
 ├── public/                    # Public static assets
+│   ├── admin/
+│   │   └── config.yml         # Decap CMS collection & field configuration
 │   ├── favicon/               # Favicon files
-│   ├── images/                # Public images
+│   ├── images/                # Public images (uploads go to images/uploads/)
 │   ├── _headers               # Netlify Deploy Headers
 │   ├── robots.txt             # SEO crawler rules
 │   └── site.webmanifest       # PWA manifest
@@ -138,39 +140,50 @@ shadcn-studio-astro-template/
 │   ├── assets/                # SVG and other assets
 │   │
 │   ├── components/            # Reusable UI components
-│   │   └── blocks/            # Block components
-│   │   └── layout/            # Layout components
-│   │   └── sections/          # Data of components
-│   │   └── ui/                # Base UI components
+│   │   ├── blocks/            # Block/section components
+│   │   ├── layout/            # Layout components (Header, Footer)
+│   │   └── ui/                # Base UI components (shadcn/ui)
+│   │
+│   ├── content/               # Astro Content Collections (Markdown files)
+│   │   ├── blog/              # Blog / New Items posts
+│   │   ├── features/          # Feature / Popular Dishes cards
+│   │   ├── sections/          # Page section settings
+│   │   │   ├── hero.md        #   Hero titles + carousel slides
+│   │   │   ├── about.md       #   About Us content & stats
+│   │   │   ├── contact.md     #   Contact info cards
+│   │   │   └── promotions.md  #   Promotions gallery banners
+│   │   └── testimonials/      # Customer testimonial cards
 │   │
 │   ├── layouts/               # Astro layout files
-│   │   ├── BlankLayout.astro  # Minimal layout
 │   │   ├── HeadSeo.astro      # SEO head layout
 │   │   └── Layout.astro       # Main site layout
 │   │
 │   ├── lib/                   # Helper libraries
-│   │   └── utils.ts           # Utility functions
+│   │   └── utils.ts           # Utility functions (cn, etc.)
 │   │
 │   ├── pages/                 # Route-based pages
+│   │   ├── admin/
+│   │   │   └── index.astro    # Decap CMS admin panel (styled previews)
 │   │   ├── 404.astro          # 404 page
 │   │   ├── index.astro        # Home page
-│   │   ├── login.astro        # Login page
 │   │   └── rss.xml.js         # RSS feed generator
 │   │
 │   ├── styles/
-│   │   └── global.css         # Global styles
+│   │   └── global.css         # Global Tailwind styles
 │   │
-│   ├── utils/                 # Utility functions
+│   ├── utils/
+│   │   ├── icons.ts           # Lucide React icon string→component map
 │   │   └── seo.ts             # SEO helpers
+│   │
+│   ├── content.config.ts      # Astro Content Collection Zod schemas
 │   └── consts.ts              # Application constants (SEO)
 │
 ├── astro.config.mjs           # Astro configuration
-├── content.config.ts          # Content collections config
 ├── .env.example               # Environment variable template
 ├── components.json            # shadcn/ui config
 ├── package.json               # Dependencies & scripts
 ├── tsconfig.json              # TypeScript configuration
-└── vercel.json                # Vercel deployment config
+└── netlify.toml               # Netlify deployment config
 ```
 
 ## 🚀 Quick Start
@@ -197,7 +210,7 @@ shadcn-studio-astro-template/
    This runs the **Astro development server** (on port `4321`) and the **Decap CMS local filesystem proxy** (on port `8081`) concurrently.
 
    * **Website**: `http://localhost:4321`
-   * **CMS Admin Panel**: `http://localhost:4321/admin/index.html` (allows you to edit content locally, updating your markdown files in real time).
+   * **CMS Admin Panel**: `http://localhost:4321/admin/` (allows you to edit content locally, updating your markdown files in real time).
 
 3. **Build for production:**
 
