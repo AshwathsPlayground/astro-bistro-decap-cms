@@ -8,9 +8,9 @@ media_folder: public/images/uploads
 public_folder: /images/uploads
 
 collections:
-  - name: slides
-    label: Slides
-    folder: src/content/slides
+  - name: hero-slides
+    label: Hero Slides
+    folder: src/content/hero-slides
     create: true
     format: frontmatter
     identifier_field: title
@@ -22,13 +22,13 @@ collections:
       - { label: "User Comment", name: "userComment", widget: "text" }
       - { label: "User Avatar", name: "userAvatar", widget: "image" }
 
-  - name: products
-    label: Products / Featured Items
-    folder: src/content/products
+  - name: features
+    label: Features / Cards
+    folder: src/content/features
     create: true
     format: frontmatter
     fields:
-      - { label: "Item Name", name: "title", widget: "string" }
+      - { label: "Feature Title", name: "title", widget: "string" }
       - { label: "Image", name: "image", widget: "image" }
       - { label: "Image Alt Text", name: "alt", widget: "string" }
       - { label: "Category / Type (e.g. Main course 🥘)", name: "type", widget: "string" }
@@ -45,13 +45,13 @@ collections:
       - { label: "Rating (1 to 5)", name: "rating", widget: "number", value_type: "float", min: 1, max: 5, step: 0.5 }
       - { label: "Review Content", name: "content", widget: "text" }
 
-  - name: articles
-    label: Articles / News
-    folder: src/content/articles
+  - name: blog
+    label: Blog / News
+    folder: src/content/blog
     create: true
     format: frontmatter
     fields:
-      - { label: "Article Title", name: "title", widget: "string" }
+      - { label: "Post Title", name: "title", widget: "string" }
       - { label: "Featured Image", name: "img", widget: "image" }
       - { label: "Image Alt Text", name: "alt", widget: "string" }
       - { label: "Summary / Description", name: "description", widget: "text" }
