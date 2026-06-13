@@ -65,7 +65,26 @@ const pages = defineCollection({
         line2: z.string(),
         icon: z.string()
       }))
-    })
+    }),
+    contact: z.array(z.object({
+      title: z.string(),
+      description: z.string(),
+      icon: z.string()
+    })),
+    promotions: z.array(z.object({
+      src: z.string(),
+      alt: z.string(),
+      className: z.string(),
+      offerText: z.object({
+        text: z.string(),
+        className: z.string().optional()
+      }).optional(),
+      offerButton: z.object({
+        text: z.string(),
+        link: z.string(),
+        className: z.string().optional()
+      }).optional()
+    }))
   })
 })
 
