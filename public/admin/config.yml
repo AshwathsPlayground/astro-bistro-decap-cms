@@ -57,41 +57,45 @@ collections:
       - { label: "Summary / Description", name: "description", widget: "text" }
       - { label: "Read More Link", name: "blogLink", widget: "string", default: "#" }
 
-  - name: pages
-    label: Pages
+  - name: sections
+    label: Sections
     files:
-      - name: home
-        label: Home Page Settings
-        file: src/content/pages/home.md
+      - name: hero
+        label: Hero Section
+        file: src/content/sections/hero.md
         format: frontmatter
         fields:
-          - label: Hero Headings
-            name: hero
-            widget: object
+          - { label: "Main Title", name: "title", widget: "string" }
+          - { label: "Subheading / Description", name: "description", widget: "text" }
+
+      - name: about
+        label: About Section
+        file: src/content/sections/about.md
+        format: frontmatter
+        fields:
+          - { label: "Section Badge", name: "badge", widget: "string", default: "About Us" }
+          - { label: "Section Title", name: "title", widget: "string" }
+          - { label: "Section Description", name: "description", widget: "text" }
+          - { label: "Read More Link", name: "readMoreLink", widget: "string", default: "#" }
+          - { label: "About Image", name: "image", widget: "image" }
+          - label: Achievements Stats
+            name: stats
+            widget: list
             fields:
-              - { label: "Main Title", name: "title", widget: "string" }
-              - { label: "Subheading / Description", name: "description", widget: "text" }
-          - label: About Section
-            name: about
-            widget: object
-            fields:
-              - { label: "Section Badge", name: "badge", widget: "string", default: "About Us" }
-              - { label: "Section Title", name: "title", widget: "string" }
-              - { label: "Section Description", name: "description", widget: "text" }
-              - { label: "Read More Link", name: "readMoreLink", widget: "string", default: "#" }
-              - { label: "About Image", name: "image", widget: "image" }
-              - label: Achievements Stats
-                name: stats
-                widget: list
-                fields:
-                  - { label: "Stat Value (e.g. 20+)", name: "value", widget: "string" }
-                  - { label: "Line 1 Description", name: "line1", widget: "string" }
-                  - { label: "Line 2 Description", name: "line2", widget: "string" }
-                  - label: Icon
-                    name: icon
-                    widget: select
-                    options: ["SparklesIcon", "ChefHat", "Users", "Trophy"]
-          - label: Contact Section
+              - { label: "Stat Value (e.g. 20+)", name: "value", widget: "string" }
+              - { label: "Line 1 Description", name: "line1", widget: "string" }
+              - { label: "Line 2 Description", name: "line2", widget: "string" }
+              - label: Icon
+                name: icon
+                widget: select
+                options: ["SparklesIcon", "ChefHat", "Users", "Trophy"]
+
+      - name: contact
+        label: Contact Section
+        file: src/content/sections/contact.md
+        format: frontmatter
+        fields:
+          - label: Contact Cards
             name: contact
             widget: list
             fields:
@@ -101,7 +105,13 @@ collections:
                 name: icon
                 widget: select
                 options: ["Clock8Icon", "MapPinIcon", "Mail", "PhoneIcon"]
-          - label: Promotions Section
+
+      - name: promotions
+        label: Promotions Section
+        file: src/content/sections/promotions.md
+        format: frontmatter
+        fields:
+          - label: Promotions Banners
             name: promotions
             widget: list
             fields:
