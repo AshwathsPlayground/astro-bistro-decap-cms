@@ -7,7 +7,7 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "astro dev",
+    "dev": "concurrently \"decap-server\" \"astro dev\"",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
@@ -47,6 +47,8 @@
     "@typescript-eslint/eslint-plugin": "^8.60.0",
     "@typescript-eslint/parser": "^8.60.0",
     "astro-eslint-parser": "^1.4.0",
+    "concurrently": "^10.0.3",
+    "decap-server": "^3.9.0",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-astro": "^1.7.0",
