@@ -46,31 +46,25 @@ const testimonials = defineCollection({
   })
 })
 
-const pages = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/pages' }),
+const sections = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/sections' }),
   schema: z.object({
-    hero: z.object({
-      title: z.string(),
-      description: z.string()
-    }),
-    about: z.object({
-      badge: z.string().default('About Us'),
-      title: z.string(),
-      description: z.string(),
-      readMoreLink: z.string().default('#'),
-      image: z.string(),
-      stats: z.array(z.object({
-        value: z.string(),
-        line1: z.string(),
-        line2: z.string(),
-        icon: z.string()
-      }))
-    }),
+    title: z.string().optional(),
+    description: z.string().optional(),
+    badge: z.string().default('About Us').optional(),
+    readMoreLink: z.string().default('#').optional(),
+    image: z.string().optional(),
+    stats: z.array(z.object({
+      value: z.string(),
+      line1: z.string(),
+      line2: z.string(),
+      icon: z.string()
+    })).optional(),
     contact: z.array(z.object({
       title: z.string(),
       description: z.string(),
       icon: z.string()
-    })),
+    })).optional(),
     promotions: z.array(z.object({
       src: z.string(),
       alt: z.string(),
@@ -84,7 +78,7 @@ const pages = defineCollection({
         link: z.string(),
         className: z.string().optional()
       }).optional()
-    }))
+    })).optional()
   })
 })
 
@@ -93,5 +87,5 @@ export const collections = {
   'hero-slides': heroSlides, 
   features,
   testimonials,
-  pages
+  sections
 }
