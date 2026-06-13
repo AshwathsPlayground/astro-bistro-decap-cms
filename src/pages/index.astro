@@ -67,21 +67,24 @@ const newItems = blogRaw.length > 0
     }))
   : []
 
-// Fetch single-file homepage settings
-const homePage = await getEntry('pages', 'home')
+// Fetch sections content from separate files
+const heroEntry = await getEntry('sections', 'hero')
+const aboutEntry = await getEntry('sections', 'about')
+const contactEntry = await getEntry('sections', 'contact')
+const promotionsEntry = await getEntry('sections', 'promotions')
 
-const heroData = homePage?.data.hero ?? {
-  title: "Savor the taste of perfection",
-  description: "Welcome to Restaurant where passion meets the plate.From sizzling appetisers to signature desserts, every dish is crafted to delight your senses."
+const heroData = {
+  title: heroEntry?.data.title ?? "Savor the taste of perfection",
+  description: heroEntry?.data.description ?? "Welcome to Restaurant where passion meets the plate.From sizzling appetisers to signature desserts, every dish is crafted to delight your senses."
 }
 
-const aboutData = homePage?.data.about ?? {
-  badge: "About Us",
-  title: "Our story & achievements",
-  description: "At Restaurant, every dish tells a story. With years of dedication and a passion for fine dining, we've transformed the art of cooking into an unforgettable experience.",
-  readMoreLink: "#",
-  image: "/images/about-us.webp",
-  stats: []
+const aboutData = {
+  badge: aboutEntry?.data.badge ?? "About Us",
+  title: aboutEntry?.data.title ?? "Our story & achievements",
+  description: aboutEntry?.data.description ?? "At Restaurant, every dish tells a story. With years of dedication and a passion for fine dining, we've transformed the art of cooking into an unforgettable experience.",
+  readMoreLink: aboutEntry?.data.readMoreLink ?? "#",
+  image: aboutEntry?.data.image ?? "/images/about-us.webp",
+  stats: aboutEntry?.data.stats ?? []
 }
 
 // Map stats dynamic Lucide React icons
@@ -94,7 +97,7 @@ const stats = aboutData.stats && aboutData.stats.length > 0
   : []
 
 // Fetch dynamic contact info
-const contactInfoData = homePage?.data.contact ?? [
+const contactInfoData = contactEntry?.data.contact ?? [
   {
     title: 'Open Hours',
     icon: 'Clock8Icon',
@@ -124,7 +127,7 @@ const contactInfo = contactInfoData.map(info => ({
 }))
 
 // Fetch dynamic promotions content
-const galleryImage = homePage?.data.promotions ?? [
+const galleryImage = promotionsEntry?.data.promotions ?? [
   {
     src: '/images/offers/offers-image-01.webp',
     alt: 'Launch deal',
