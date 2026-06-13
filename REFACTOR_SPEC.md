@@ -12,7 +12,7 @@ graph TD
     DecapApp -->|Authentication| NetlifyIdentity[Netlify Identity Widget]
     DecapApp -->|Save Request| GitGateway[Netlify Git Gateway]
     GitGateway -->|Pushes Commits| GitHub[GitHub Repo]
-    GitGateway -->|Triggers Webhook| NetlifyBuild[Netlify Build Pipeline]
+    GitHub -->|Triggers Webhook| NetlifyBuild[Netlify Build Pipeline]
     NetlifyBuild -->|Parses Collections| AstroBuild[Astro Static Builder]
     AstroBuild -->|Validates Schemas| Zod[Zod Schemas<br>src/content.config.ts]
     AstroBuild -->|Generates| StaticFiles[Static HTML/JS/CSS]
@@ -22,7 +22,7 @@ graph TD
 ### Core Components:
 1. **CMS Dashboard (`public/admin/`)**: A client-side, zero-database administration panel powered by Decap CMS.
 2. **Netlify Identity & Git Gateway**: Manages access control (inviting admins, logins) and securely handles writing edits directly to Git without exposing repository keys.
-3. **Astro Content Collections (`src/content/`)**: Astro's type-safe system for reading local Markdown files, validating frontmatter structures with Zod, and building high-performance static HTML pages.
+3. **Astro Content Collections (`src/content/`)**: Astro's type-safe system for reading local Markdown/JSON files, validating frontmatter structures with Zod, and building high-performance static HTML pages.
 
 ---
 
@@ -31,8 +31,8 @@ graph TD
 To make this repository a bulletproof **reusable template** that others can adopt, we will follow these principles:
 
 ### A. Graceful UI Fallbacks (No Crashes on Empty State)
-When a user boots up this template for their own restaurant, they may want to delete all our mock dishes and reviews. The website must not crash.
-* **Collections Check**: For every folder-based collection (Dishes, Testimonials, Slides), components will check if `collection.length === 0`.
+When a user boots up this template for their own business, they may want to delete all our mock products and reviews. The website must not crash.
+* **Collections Check**: For every folder-based collection (Products, Testimonials, Slides), components will check if `collection.length === 0`.
 * **Behavior**: 
   * If a list is empty in production, the corresponding UI section will **gracefully hide** or collapse so the website looks complete.
   * In local development mode (`import.meta.env.DEV`), we will render a helpful developer notice: *"No items found. Go to /admin to add some!"*
@@ -58,37 +58,37 @@ We will execute this refactor across four isolated branches/PRs to discuss, code
 * **Files Affected**:
   * Create `netlify.toml` with build settings.
   * Create `public/admin/index.html` (admin shell).
-  * Create `public/admin/config.yml` (CMS collection layouts and settings).
+  * Create `public/admin/config.yml` (CMS generic collection layouts: `slides`, `products`, `testimonials`, `articles`, `pages/home`).
   * Modify `src/layouts/Layout.astro` to embed the Netlify Identity widget and redirect scripts.
-* **Verification**: Verify `/admin/` displays the login widget locally and compiling the project runs successfully.
+* **Verification**: Verify `/admin/index.html` displays the login widget locally and compiling the project runs successfully.
 
-### Phase 2 (PR #2): Hero Slides & Popular Dishes Collections
-* **Branch**: `feat/hero-dishes-collections`
-* **Goal**: Refactor the Hero slider and Popular Dishes grid.
+### Phase 2 (PR #2): Slides & Products Collections
+* **Branch**: `feat/slides-products-collections`
+* **Goal**: Refactor the Hero slider and Products grid.
 * **Files Affected**:
-  * Modify `src/content.config.ts` to define Zod schemas for `heroSlides` and `dishes`.
-  * Create markdown entries under `src/content/heroSlides/` and `src/content/dishes/` matching the current template content.
+  * Modify `src/content.config.ts` to define Zod schemas for `slides` and `products`.
+  * Create markdown entries under `src/content/slides/` and `src/content/products/` matching the current template content.
   * Modify `src/pages/index.astro` to load these collections dynamically.
-  * Refactor components to handle empty lists safely.
-* **Verification**: Ensure Hero and Dishes sections look identical to the baseline, and hide correctly if markdown files are removed.
+  * Refactor components (`HeroSection`, `PopularDishes`) to handle empty lists safely.
+* **Verification**: Ensure Hero and Products sections look identical to the baseline, and hide correctly if markdown files are removed.
 
-### Phase 3 (PR #3): About Us, Testimonials & New Items
-* **Branch**: `feat/about-testimonials-collections`
-* **Goal**: Refactor sections with icons (About Us achievements stats), customer reviews, and news grid cards.
+### Phase 3 (PR #3): About Section, Testimonials & Articles
+* **Branch**: `feat/about-testimonials-articles`
+* **Goal**: Refactor sections with icons (About section achievements stats), customer reviews, and article cards.
 * **Files Affected**:
   * Create `src/utils/icons.ts` for Lucide React dynamic lookup mapping.
-  * Modify `src/content.config.ts` for testimonials, new items, and About Us schemas.
-  * Create markdown files for testimonies, stats, and new items.
-  * Refactor `AboutUs`, `Testimonials`, and `NewItems` components.
+  * Modify `src/content.config.ts` for testimonials, articles, and about schemas.
+  * Create markdown files for testimonies, stats, and articles.
+  * Refactor `AboutUs`, `Testimonials`, and `NewItems` components to use generic schemas and data sources.
 * **Verification**: Verify icon mapping works correctly and reviewers ratings are type-safe.
 
-### Phase 4 (PR #4): Contact coordinates, Offer Banners & Production Build
-* **Branch**: `feat/contact-offers-cleanup`
-* **Goal**: Migrate remaining layout details (hours, phone, address cards, offer promo grids) and perform full regression checks.
+### Phase 4 (PR #4): Contact coordinates, Promotions Banners & Production Build
+* **Branch**: `feat/contact-promotions-cleanup`
+* **Goal**: Migrate remaining layout details (hours, phone, address cards, promotions grid graphics) and perform final verification.
 * **Files Affected**:
-  * Define schemas for contact-us data and offers grid layout.
+  * Define schemas for contact data and promotions layout.
   * Build final markdown pages.
-  * Modify components to load dynamic coordinates.
+  * Modify components (`ContactUs`, `Offers`) to load dynamic coordinates and promotions data.
 * **Verification**: Run `npm run check-types` and `npm run build` to verify there are no compilation errors.
 
 ---

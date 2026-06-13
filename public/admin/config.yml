@@ -6,30 +6,30 @@ media_folder: public/images/uploads
 public_folder: /images/uploads
 
 collections:
-  - name: heroSlides
-    label: Hero Slides
-    folder: src/content/heroSlides
+  - name: slides
+    label: Slides
+    folder: src/content/slides
     create: true
     format: frontmatter
     identifier_field: title
     fields:
       - { label: "Slide Identifier (e.g. Slide 1)", name: "title", widget: "string" }
       - { label: "Display Order ID", name: "id", widget: "number", value_type: "int" }
-      - { label: "Dish Image", name: "img", widget: "image" }
+      - { label: "Image", name: "img", widget: "image" }
       - { label: "Image Alt Text", name: "imgAlt", widget: "string" }
       - { label: "User Comment", name: "userComment", widget: "text" }
       - { label: "User Avatar", name: "userAvatar", widget: "image" }
 
-  - name: dishes
-    label: Popular Dishes
-    folder: src/content/dishes
+  - name: products
+    label: Products / Featured Items
+    folder: src/content/products
     create: true
     format: frontmatter
     fields:
-      - { label: "Dish Name", name: "title", widget: "string" }
-      - { label: "Dish Image", name: "image", widget: "image" }
+      - { label: "Item Name", name: "title", widget: "string" }
+      - { label: "Image", name: "image", widget: "image" }
       - { label: "Image Alt Text", name: "alt", widget: "string" }
-      - { label: "Dish Category / Type (e.g. Main course 🥘)", name: "type", widget: "string" }
+      - { label: "Category / Type (e.g. Main course 🥘)", name: "type", widget: "string" }
       - { label: "Description", name: "description", widget: "text" }
 
   - name: testimonials
@@ -43,17 +43,17 @@ collections:
       - { label: "Rating (1 to 5)", name: "rating", widget: "number", value_type: "float", min: 1, max: 5, step: 0.5 }
       - { label: "Review Content", name: "content", widget: "text" }
 
-  - name: newItems
-    label: New Menu Items
-    folder: src/content/newItems
+  - name: articles
+    label: Articles / News
+    folder: src/content/articles
     create: true
     format: frontmatter
     fields:
-      - { label: "Item Title", name: "title", widget: "string" }
-      - { label: "Item Image", name: "img", widget: "image" }
+      - { label: "Article Title", name: "title", widget: "string" }
+      - { label: "Featured Image", name: "img", widget: "image" }
       - { label: "Image Alt Text", name: "alt", widget: "string" }
-      - { label: "Description", name: "description", widget: "text" }
-      - { label: "Learn More Link (Blog)", name: "blogLink", widget: "string", default: "#" }
+      - { label: "Summary / Description", name: "description", widget: "text" }
+      - { label: "Read More Link", name: "blogLink", widget: "string", default: "#" }
 
   - name: pages
     label: Pages
@@ -69,8 +69,8 @@ collections:
             fields:
               - { label: "Main Title", name: "title", widget: "string" }
               - { label: "Subheading / Description", name: "description", widget: "text" }
-          - label: About Us Section
-            name: aboutUs
+          - label: About Section
+            name: about
             widget: object
             fields:
               - { label: "Section Badge", name: "badge", widget: "string", default: "About Us" }
@@ -89,8 +89,8 @@ collections:
                     name: icon
                     widget: select
                     options: ["SparklesIcon", "ChefHat", "Users", "Trophy"]
-          - label: Contact Us Section
-            name: contactUs
+          - label: Contact Section
+            name: contact
             widget: list
             fields:
               - { label: "Card Title", name: "title", widget: "string" }
@@ -99,20 +99,20 @@ collections:
                 name: icon
                 widget: select
                 options: ["Clock8Icon", "MapPinIcon", "Mail", "PhoneIcon"]
-          - label: Offers Section
-            name: offers
+          - label: Promotions Section
+            name: promotions
             widget: list
             fields:
               - { label: "Promo Image", name: "src", widget: "image" }
               - { label: "Alt Text", name: "alt", widget: "string" }
               - { label: "Grid Size Class", name: "className", widget: "select", options: ["col-span-2 row-span-2", "col-span-2 max-h-60"] }
-              - label: Offer Title Text
+              - label: Promo Title Text
                 name: offerText
                 widget: object
                 fields:
                   - { label: "Text", name: "text", widget: "string" }
                   - { label: "Class Styling", name: "className", widget: "string" }
-              - label: Offer Action Button
+              - label: Promo Action Button
                 name: offerButton
                 widget: object
                 fields:
