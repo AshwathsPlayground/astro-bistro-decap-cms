@@ -194,7 +194,10 @@ shadcn-studio-astro-template/
    pnpm run dev
    ```
 
-   The site will be available at `http://localhost:4321`
+   This runs the **Astro development server** (on port `4321`) and the **Decap CMS local filesystem proxy** (on port `8081`) concurrently.
+
+   * **Website**: `http://localhost:4321`
+   * **CMS Admin Panel**: `http://localhost:4321/admin/index.html` (allows you to edit content locally, updating your markdown files in real time).
 
 3. **Build for production:**
 
@@ -216,7 +219,7 @@ The template comes with several pre-configured scripts to help you with developm
 
 | Command       | Action                                                                                                                                 |
 | :------------ | :------------------------------------------------------------------------------------------------------------------------------------- |
-| `dev`         | Starts the Astro development server with hot-reload enabled. Your application will be available at http://localhost:4321/              |
+| `dev`         | Starts both the Astro dev server (http://localhost:4321) and the Decap CMS local filesystem proxy (port 8081) concurrently.            |
 | `build`       | Creates an optimized production build of your application. This command generates static files and optimizes your code for deployment. |
 | `preview`     | Preview production site locally. Use this to test your production build locally before deploying.                                      |
 | `lint`        | Runs ESLint to check your code for potential errors and code quality issues. This helps maintain clean and consistent code.            |
