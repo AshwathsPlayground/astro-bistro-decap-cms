@@ -20,4 +20,28 @@ const blog = defineCollection({
   })
 })
 
-export const collections = { blog }
+const slides = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/slides' }),
+  schema: z.object({
+    title: z.string(),
+    id: z.number(),
+    img: z.string(),
+    imgAlt: z.string(),
+    userComment: z.string(),
+    userAvatar: z.string()
+  })
+})
+
+const products = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/products' }),
+  schema: z.object({
+    title: z.string(),
+    image: z.string(),
+    alt: z.string(),
+    type: z.string(),
+    description: z.string()
+  })
+})
+
+export const collections = { blog, slides, products }
+
