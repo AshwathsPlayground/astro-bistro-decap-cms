@@ -11,11 +11,13 @@ import Offers from '@/components/blocks/offers-section/offers-section'
 import { getCollection, getEntry } from 'astro:content'
 import { iconMap } from '@/utils/icons'
 
-// Fetch sections content from separate files
-const heroEntry = await getEntry('sections', 'hero')
-const aboutEntry = await getEntry('sections', 'about')
-const contactEntry = await getEntry('sections', 'contact')
-const promotionsEntry = await getEntry('sections', 'promotions')
+// Fetch sections content from separate files in parallel
+const [heroEntry, aboutEntry, contactEntry, promotionsEntry] = await Promise.all([
+  getEntry('sections', 'hero'),
+  getEntry('sections', 'about'),
+  getEntry('sections', 'contact'),
+  getEntry('sections', 'promotions')
+])
 
 // Fetch dynamic slides content directly from combined hero entry
 const slidesRaw = heroEntry?.data.slides ?? []
