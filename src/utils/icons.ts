@@ -1,4 +1,5 @@
 import {
+  type LucideIcon,
   SparklesIcon,
   ChefHat,
   Users,
@@ -9,7 +10,7 @@ import {
   PhoneIcon
 } from 'lucide-react'
 
-export const iconMap: Record<string, any> = {
+export const iconMap = {
   SparklesIcon,
   ChefHat,
   Users,
@@ -18,4 +19,4 @@ export const iconMap: Record<string, any> = {
   MapPinIcon,
   Mail,
   PhoneIcon
-}
+} as const satisfies Record<string, LucideIcon>
