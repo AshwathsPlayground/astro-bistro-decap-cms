@@ -1,0 +1,447 @@
+---
+import '@/styles/global.css'
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Bistro Content Manager</title>
+    <!-- Netlify Identity Widget -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" is:inline></script>
+    <!-- Google Fonts for Bistro theme -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Kaushan+Script&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <!-- Decap CMS React App UMD Bundle -->
+    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js" is:inline></script>
+    
+    <script is:inline>
+      // Retrieve the official built-in React component helpers exposed by Decap CMS UMD
+      const createClass = window.createClass;
+      const h = window.h;
+
+      // Map SVG icons for premium appearance inside iframe
+      const iconMapSvg = {
+        SparklesIcon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-7"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z"/><path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 5Z"/><path d="m19 17 1 2.5 2.5.5-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1Z"/></svg>`,
+        ChefHat: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-7"><path d="M6 18V6a4 4 0 0 1 8 0v12"/><path d="M18 18V9a4 4 0 0 0-8 0v9"/><path d="M3 18h18a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1Z"/><path d="M12 6V3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3"/></svg>`,
+        Users: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-7"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+        Trophy: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-7"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"/><path d="M12 2a6 6 0 0 1 6 6v3.5c0 1.62-1.38 3-3 3H9c-1.62 0-3-1.38-3-3V8a6 6 0 0 1 6-6Z"/></svg>`,
+        Clock8Icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 8 14"/></svg>`,
+        MapPinIcon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`,
+        Mail: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>`,
+        PhoneIcon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`
+      };
+
+      // Helper to render lucide icon placeholders using mapped inline SVGs
+      const IconPlaceholder = (iconName) => {
+        const svgContent = iconMapSvg[iconName] || iconMapSvg['Trophy'];
+        return h('div', { 
+          className: 'text-primary flex items-center justify-center',
+          dangerouslySetInnerHTML: { __html: svgContent }
+        });
+      };
+
+      // Shared style syncing helper function
+      const syncIframeStyles = (iframeDoc) => {
+        const parentDoc = window.document;
+        if (!iframeDoc) return;
+        
+        // Clear previous cloned style blocks
+        const oldClones = iframeDoc.head.querySelectorAll('.cloned-parent-style');
+        oldClones.forEach(el => el.remove());
+
+        // Clone all stylesheets, style blocks, and font link tags from parent head into iframe head
+        const styles = parentDoc.querySelectorAll('style, link[rel="stylesheet"], link[rel="preconnect"], link[href*="fonts.googleapis.com"]');
+        styles.forEach(style => {
+          const clone = style.cloneNode(true);
+          clone.classList.add('cloned-parent-style');
+          iframeDoc.head.appendChild(clone);
+        });
+
+        // Set body style of iframe to fit layout correctly
+        if (iframeDoc.body) {
+          iframeDoc.body.className = 'flex min-h-full w-full flex-auto flex-col bg-background text-foreground antialiased';
+        }
+
+        // Sync dark mode class
+        if (parentDoc.documentElement.classList.contains('dark')) {
+          iframeDoc.documentElement.classList.add('dark');
+        } else {
+          iframeDoc.documentElement.classList.remove('dark');
+        }
+      };
+
+      // 1. Hero Preview Component (Matches hero-section.tsx layout)
+      const HeroPreview = createClass({
+        componentDidMount: function() {
+          syncIframeStyles(this.props.document);
+        },
+        componentDidUpdate: function() {
+          syncIframeStyles(this.props.document);
+        },
+        render: function() {
+          const entry = this.props.entry;
+          const title = entry.getIn(['data', 'title']) || 'Savor the taste of perfection';
+          const description = entry.getIn(['data', 'description']) || '';
+          const slides = entry.getIn(['data', 'slides'])?.toJS() || [];
+
+          // Sort slides by ID to match actual site sorting logic
+          const sortedSlides = slides.sort((a, b) => (a.id || 0) - (b.id || 0));
+          const activeSlide = sortedSlides[0] || { img: '', imgAlt: '', userAvatar: '', userComment: 'No slides configured.' };
+
+          return h('section', { 
+            id: 'home',
+            className: 'before:border-primary/20 relative flex-1 py-12 before:absolute before:inset-0 before:-z-10 before:-skew-y-3 before:border-b sm:py-16 lg:py-24 bg-background text-foreground overflow-x-hidden'
+          },
+            h('div', { className: 'mx-auto flex h-full max-w-7xl flex-col gap-16 px-4 sm:px-6 lg:px-8' },
+              // Top Grid
+              h('div', { className: 'grid grid-cols-1 gap-6 gap-y-12 md:gap-y-16 lg:grid-cols-5' },
+                // Left Column
+                h('div', { className: 'flex w-full flex-col justify-center gap-5 max-lg:items-center lg:col-span-3 lg:h-95.5' },
+                  h('h1', { className: 'text-3xl leading-[1.29167] font-semibold text-balance max-lg:text-center sm:text-4xl lg:text-5xl' }, title),
+                  h('p', { className: 'text-muted-foreground max-w-xl text-xl max-lg:text-center' }, description),
+                  h('div', { className: 'flex items-center gap-3.5' },
+                    h('a', { 
+                      href: '#', 
+                      onClick: e => e.preventDefault(),
+                      className: 'relative inline-flex items-center justify-center rounded-full text-base bg-primary text-primary-foreground font-semibold px-6 py-2.5 shadow hover:bg-primary/90' 
+                    }, 'Order now', h('span', { className: 'ml-2' }, '→')),
+                    h('a', { 
+                      href: '#', 
+                      onClick: e => e.preventDefault(),
+                      className: 'bg-primary/10 hover:bg-primary/20 text-primary rounded-full text-base px-6 py-2.5 font-semibold' 
+                    }, 'Book table')
+                  )
+                ),
+                // Right Column (Active Dish Showcase)
+                h('div', { className: 'w-full lg:col-span-2 flex items-center justify-center' },
+                  activeSlide.img && h('img', { src: activeSlide.img, alt: activeSlide.imgAlt, className: 'size-95 object-contain' })
+                )
+              ),
+              // Bottom Grid
+              h('div', { className: 'grid grid-cols-1 gap-24 gap-y-12 md:gap-y-16 lg:grid-cols-5' },
+                // Slides thumbnails list (representative of the Embla carousel)
+                h('div', { className: 'relative w-full max-lg:order-2 lg:col-span-3' },
+                  h('div', { className: 'flex gap-4 overflow-x-auto py-2' },
+                    sortedSlides.map((slide, index) => 
+                      h('div', { 
+                        key: index, 
+                        className: `flex-shrink-0 cursor-pointer p-1 border rounded-lg transition-all duration-300 ${index === 0 ? 'border-primary scale-105' : 'border-border'}`
+                      },
+                        h('img', { src: slide.img, alt: slide.imgAlt, className: 'size-20 object-contain' })
+                      )
+                    )
+                  )
+                ),
+                // Active Comment Box
+                h('div', { className: 'flex w-full items-center justify-center lg:col-span-2' },
+                  h('div', { className: 'flex h-full min-h-14 w-full items-center justify-center gap-4 px-6 py-4 border rounded-none bg-card text-card-foreground shadow-sm' },
+                    activeSlide.userAvatar && h('img', { src: activeSlide.userAvatar, className: 'size-10 rounded-full object-cover border' }),
+                    h('div', { className: 'bg-primary hidden h-6 w-0.5 rounded-full sm:block' }),
+                    h('p', { className: 'text-card-foreground text-sm' }, activeSlide.userComment)
+                  )
+                )
+              )
+            )
+          );
+        }
+      });
+
+      // 2. About Preview Component (Matches about-us-page.tsx layout)
+      const AboutPreview = createClass({
+        componentDidMount: function() {
+          syncIframeStyles(this.props.document);
+        },
+        componentDidUpdate: function() {
+          syncIframeStyles(this.props.document);
+        },
+        render: function() {
+          const entry = this.props.entry;
+          const badge = entry.getIn(['data', 'badge']) || 'About Us';
+          const title = entry.getIn(['data', 'title']) || '';
+          const description = entry.getIn(['data', 'description']) || '';
+          const image = entry.getIn(['data', 'image']) || '/images/about-us.webp';
+          const stats = entry.getIn(['data', 'stats'])?.toJS() || [];
+
+          return h('section', { 
+            id: 'about-us',
+            className: 'before:bg-muted relative py-8 before:absolute before:inset-0 before:-z-10 before:skew-y-3 sm:py-16 lg:py-24 bg-background text-foreground' 
+          },
+            h('div', { className: 'mx-auto max-w-7xl px-4 sm:px-6 lg:px-8' },
+              // Header
+              h('div', { className: 'mx-auto mb-12 flex max-w-3xl flex-col items-center justify-center space-y-4 text-center md:mb-16 lg:mb-24' },
+                h('span', { className: 'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-background text-foreground' }, badge),
+                h('h2', { className: 'text-2xl font-semibold tracking-tight md:text-3xl lg:text-4xl' }, title),
+                h('p', { className: 'text-muted-foreground text-xl' }, description),
+                h('a', { 
+                  href: '#', 
+                  onClick: e => e.preventDefault(),
+                  className: 'relative inline-flex items-center justify-center rounded-full text-base bg-primary text-primary-foreground font-semibold px-6 py-2.5 shadow hover:bg-primary/90'
+                }, 'Read more', h('span', { className: 'ml-2' }, '→'))
+              ),
+              // Body wrapper with image and overlapping stats
+              h('div', { className: 'relative mb-8 h-full w-full sm:mb-16 lg:mb-24' },
+                h('img', { src: image, alt: 'About us illustration', className: 'h-full w-full max-h-96 object-cover' }),
+                h('div', { 
+                  className: 'bg-background grid gap-10 border p-8 sm:grid-cols-2 lg:absolute lg:-bottom-25 lg:left-1/2 lg:w-3/4 lg:-translate-x-1/2 lg:grid-cols-4 lg:px-10 shadow-lg' 
+                },
+                  stats.map((stat, idx) => 
+                    h('div', { key: idx, className: 'flex flex-col items-center justify-center gap-2.5 text-center' },
+                      h('div', { className: 'flex size-7 items-center justify-center' },
+                        IconPlaceholder(stat.icon)
+                      ),
+                      h('span', { className: 'text-2xl font-semibold mt-1' }, stat.value),
+                      h('p', { className: 'text-muted-foreground text-sm' }, 
+                        stat.line1, 
+                        h('br'), 
+                        stat.line2
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          );
+        }
+      });
+
+      // 3. Contact Preview Component (Matches contact-us-page.tsx layout)
+      const ContactPreview = createClass({
+        componentDidMount: function() {
+          syncIframeStyles(this.props.document);
+        },
+        componentDidUpdate: function() {
+          syncIframeStyles(this.props.document);
+        },
+        render: function() {
+          const entry = this.props.entry;
+          const badge = entry.getIn(['data', 'badge']) || 'Contact Us';
+          const title = entry.getIn(['data', 'title']) || 'Get in touch with us';
+          const description = entry.getIn(['data', 'description']) || 'We eagerly look forward to warmly welcoming you very soon to our event. It promises to be a memorable experience filled with exciting activities.';
+          const image = entry.getIn(['data', 'image']) || '/images/contact-us-01.webp';
+          const rightTitle = entry.getIn(['data', 'rightTitle']) || "We're here to serve you";
+          const rightDescription = entry.getIn(['data', 'rightDescription']) || "We would love to hear from you, Whether you have a question, need a reservation, or want to learn more about our offerings, we're here to assist.";
+          const contactList = entry.getIn(['data', 'contact'])?.toJS() || [];
+
+          return h('section', { 
+            id: 'contact-us',
+            className: 'before:bg-muted relative py-8 before:absolute before:inset-0 before:-z-10 before:skew-y-3 sm:py-16 lg:py-24 bg-background text-foreground'
+          },
+            h('div', { className: 'mx-auto max-w-7xl px-4 sm:px-6 lg:px-8' },
+              // Header
+              h('div', { className: 'mx-auto mb-12 flex max-w-2xl flex-col items-center justify-center space-y-4 text-center sm:mb-16 lg:mb-24' },
+                h('span', { className: 'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-background text-foreground' }, badge),
+                h('h2', { className: 'text-2xl font-semibold md:text-3xl lg:text-4xl' }, title),
+                h('p', { className: 'text-muted-foreground text-xl' }, description)
+              ),
+              // Grid content
+              h('div', { className: 'grid items-center gap-12 lg:grid-cols-2' },
+                h('img', { 
+                  src: image, 
+                  alt: 'Contact illustration', 
+                  className: 'size-full object-cover max-lg:max-h-70' 
+                }),
+                h('div', null,
+                  h('h3', { className: 'mb-2 text-2xl font-normal' }, rightTitle),
+                  h('p', { className: 'text-muted-foreground mb-10 text-lg' }, rightDescription),
+                  // Contact Info Cards
+                  h('div', { className: 'grid gap-6 sm:grid-cols-2' },
+                    contactList.map((card, idx) => 
+                      h('div', { 
+                        key: idx, 
+                        className: 'bg-background hover:border-primary rounded-none border shadow-none ring-0 p-6 flex flex-col items-center gap-4 text-center transition-colors duration-300' 
+                      },
+                        h('div', { className: 'flex size-9 items-center justify-center rounded-full bg-muted text-foreground' },
+                          IconPlaceholder(card.icon)
+                        ),
+                        h('div', { className: 'space-y-3' },
+                          h('h4', { className: 'text-lg font-semibold' }, card.title),
+                          h('div', { className: 'text-muted-foreground text-base font-medium' },
+                            (card.description || '').split('\n').map((line, lIdx) => 
+                              h('p', { key: lIdx }, line)
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          );
+        }
+      });
+
+      // 4. Promotions Preview Component (Matches offers-section.tsx layout)
+      const PromotionsPreview = createClass({
+        componentDidMount: function() {
+          syncIframeStyles(this.props.document);
+        },
+        componentDidUpdate: function() {
+          syncIframeStyles(this.props.document);
+        },
+        render: function() {
+          const entry = this.props.entry;
+          const promotionsList = entry.getIn(['data', 'promotions'])?.toJS() || [];
+
+          return h('section', { 
+            id: 'offers', 
+            className: 'py-8 sm:py-16 lg:py-24 bg-background text-foreground' 
+          },
+            h('div', { className: 'mx-auto max-w-7xl px-4 sm:px-6 lg:px-8' },
+              // Header
+              h('div', { className: 'mb-12 space-y-4 text-center sm:mb-16 lg:mb-24' },
+                h('span', { className: 'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-muted text-foreground' }, 'Offers'),
+                h('h2', { className: 'text-2xl font-semibold md:text-3xl lg:text-4xl' }, 'Explore our Offerings'),
+                h('p', { className: 'text-muted-foreground text-xl' }, 
+                  "Don't miss out on the dining experience. Reserve your table and indulge in a culinary journey today."
+                )
+              ),
+              // Grid
+              h('div', { className: 'grid grid-cols-2 gap-6 md:grid-cols-4' },
+                promotionsList.map((promo, idx) => 
+                  h('div', { 
+                    key: idx, 
+                    className: `group relative overflow-hidden rounded-none ${promo.className || ''}` 
+                  },
+                    h('img', { 
+                      src: promo.src, 
+                      alt: promo.alt, 
+                      className: 'h-full w-full object-cover transition-transform duration-300 hover:scale-105' 
+                    }),
+                    promo.offerText && h('div', { className: `absolute ${promo.offerText.className || ''}` },
+                      h('p', { className: 'font-(family-name:--font-kaushan-script) text-lg text-white md:text-xl lg:text-2xl xl:text-3xl' }, promo.offerText.text)
+                    ),
+                    promo.offerButton && h('div', { className: `absolute ${promo.offerButton.className || ''}` },
+                      h('button', { 
+                        className: 'relative w-fit overflow-hidden rounded-full text-base bg-primary text-primary-foreground font-semibold px-6 py-2.5 shadow hover:bg-primary/90'
+                      }, promo.offerButton.text)
+                    )
+                  )
+                )
+              )
+            )
+          );
+        }
+      });
+
+      // 5. Feature Card Preview Component
+      const FeaturePreview = createClass({
+        componentDidMount: function() {
+          syncIframeStyles(this.props.document);
+        },
+        componentDidUpdate: function() {
+          syncIframeStyles(this.props.document);
+        },
+        render: function() {
+          const entry = this.props.entry;
+          const title = entry.getIn(['data', 'title']) || '';
+          const image = entry.getIn(['data', 'image']) || '';
+          const alt = entry.getIn(['data', 'alt']) || '';
+          const type = entry.getIn(['data', 'type']) || '';
+          const description = entry.getIn(['data', 'description']) || '';
+
+          return h('div', { className: 'p-8 max-w-sm mx-auto bg-background text-foreground' },
+            h('div', { className: 'hover:border-primary border-primary/10 overflow-hidden rounded-none border py-0 shadow-none ring-0 transition-colors duration-300 bg-card text-card-foreground' },
+              h('div', { className: 'bg-muted' },
+                h('img', { src: image, alt: alt, className: 'h-auto w-full' })
+              ),
+              h('div', { className: 'space-y-3 px-6 py-5' },
+                h('h3', { className: 'text-lg font-semibold' }, title),
+                h('div', { className: 'h-[1px] w-full bg-border my-2' }),
+                h('div', { className: 'text-muted-foreground' },
+                  h('p', { className: 'mb-1 text-base font-medium' }, type),
+                  h('p', { className: 'text-base' }, description)
+                )
+              )
+            )
+          );
+        }
+      });
+
+      // 6. Testimonial Card Preview Component
+      const TestimonialPreview = createClass({
+        componentDidMount: function() {
+          syncIframeStyles(this.props.document);
+        },
+        componentDidUpdate: function() {
+          syncIframeStyles(this.props.document);
+        },
+        render: function() {
+          const entry = this.props.entry;
+          const name = entry.getIn(['data', 'title']) || '';
+          const avatar = entry.getIn(['data', 'avatar']) || '';
+          const rating = entry.getIn(['data', 'rating']) || 5;
+          const content = entry.getIn(['data', 'content']) || '';
+
+          const stars = '★'.repeat(Math.round(rating)) + '☆'.repeat(5 - Math.round(rating));
+
+          return h('div', { className: 'p-8 max-w-sm mx-auto bg-background text-foreground' },
+            h('div', { className: 'hover:border-primary border-primary/10 h-full rounded-none border ring-0 transition-colors duration-300 bg-card text-card-foreground p-6 space-y-4' },
+              h('div', { className: 'flex items-center gap-3' },
+                h('img', { src: avatar, alt: name, className: 'size-10 overflow-hidden rounded-full border object-cover' }),
+                h('div', { className: 'flex-1' },
+                  h('h4', { className: 'text-base font-medium' }, name)
+                )
+              ),
+              h('div', { className: 'text-amber-500 text-xl' }, stars),
+              h('p', { className: 'text-base text-muted-foreground' }, content)
+            )
+          );
+        }
+      });
+
+      // 7. Blog Card Preview Component
+      const BlogPreview = createClass({
+        componentDidMount: function() {
+          syncIframeStyles(this.props.document);
+        },
+        componentDidUpdate: function() {
+          syncIframeStyles(this.props.document);
+        },
+        render: function() {
+          const entry = this.props.entry;
+          const title = entry.getIn(['data', 'title']) || '';
+          const img = entry.getIn(['data', 'img']) || '';
+          const alt = entry.getIn(['data', 'alt']) || '';
+          const description = entry.getIn(['data', 'description']) || '';
+          const blogLink = entry.getIn(['data', 'blogLink']) || '#';
+
+          return h('div', { className: 'p-8 max-w-sm mx-auto bg-background text-foreground' },
+            h('div', { className: 'hover:border-primary border-primary/10 rounded-none border pt-0 shadow-none ring-0 transition-colors duration-300 bg-card text-card-foreground' },
+              h('div', { className: 'px-0' },
+                h('img', { src: img, alt: alt, className: 'aspect-video h-60 w-full object-cover' })
+              ),
+              h('div', { className: 'p-6 mb-2 gap-3 flex flex-col' },
+                h('h3', { className: 'text-xl font-semibold' },
+                  h('a', { href: '#', onClick: e => e.preventDefault() }, title)
+                ),
+                h('p', { className: 'text-base text-muted-foreground' }, description)
+              ),
+              h('div', { className: 'px-6 pb-6' },
+                h('a', { 
+                  href: blogLink, 
+                  onClick: e => e.preventDefault(),
+                  className: 'group inline-flex h-9 items-center justify-center rounded-full bg-primary/10 hover:bg-primary/20 text-primary px-6 text-sm font-medium' 
+                }, 'Full menu')
+              )
+            )
+          );
+        }
+      });
+
+      // Register the custom previews
+      CMS.registerPreviewTemplate("hero", HeroPreview);
+      CMS.registerPreviewTemplate("about", AboutPreview);
+      CMS.registerPreviewTemplate("contact", ContactPreview);
+      CMS.registerPreviewTemplate("promotions", PromotionsPreview);
+      CMS.registerPreviewTemplate("features", FeaturePreview);
+      CMS.registerPreviewTemplate("testimonials", TestimonialPreview);
+      CMS.registerPreviewTemplate("blog", BlogPreview);
+    </script>
+  </body>
+</html>

@@ -20,7 +20,20 @@ export type MenuData = {
   userComment: string
 }
 
-const HeroSection = ({ menudata }: { menudata: MenuData[] }) => {
+type HeroSectionProps = {
+  menudata: MenuData[]
+  title?: string
+  description?: string
+}
+
+const HeroSection = ({
+  menudata,
+  title: propTitle,
+  description: propDescription
+}: HeroSectionProps) => {
+  const title = propTitle || 'Savor the taste of perfection'
+  const description = propDescription || 'Welcome to Restaurant where passion meets the plate.From sizzling appetisers to signature desserts, every dish is crafted to delight your senses.'
+
   const [mainApi, setMainApi] = useState<CarouselApi>()
   const [thumbApi, setThumbApi] = useState<CarouselApi>()
   const [commentsApi, setCommentsApi] = useState<CarouselApi>()
@@ -92,14 +105,17 @@ const HeroSection = ({ menudata }: { menudata: MenuData[] }) => {
         {/* Hero Header */}
         <div className='grid grid-cols-1 gap-6 gap-y-12 md:gap-y-16 lg:grid-cols-5'>
           <div className='flex w-full flex-col justify-center gap-5 max-lg:items-center lg:col-span-3 lg:h-95.5'>
-            <h1 className='text-3xl leading-[1.29167] font-semibold text-balance max-lg:text-center sm:text-4xl lg:text-5xl'>
-              Savor the taste of perfection
-            </h1>
+            {title && (
+              <h1 className='text-3xl leading-[1.29167] font-semibold text-balance max-lg:text-center sm:text-4xl lg:text-5xl'>
+                {title}
+              </h1>
+            )}
 
-            <p className='text-muted-foreground max-w-xl text-xl max-lg:text-center'>
-              Welcome to Restaurant where passion meets the plate.From sizzling appetisers to signature desserts, every
-              dish is crafted to delight your senses.
-            </p>
+            {description && (
+              <p className='text-muted-foreground max-w-xl text-xl max-lg:text-center'>
+                {description}
+              </p>
+            )}
 
             <div className='flex items-center gap-3.5'>
               <Button

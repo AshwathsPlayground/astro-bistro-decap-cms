@@ -2,31 +2,20 @@ backend:
   name: git-gateway
   branch: main
 
+local_backend: true
+
 media_folder: public/images/uploads
 public_folder: /images/uploads
 
 collections:
-  - name: slides
-    label: Slides
-    folder: src/content/slides
-    create: true
-    format: frontmatter
-    identifier_field: title
-    fields:
-      - { label: "Slide Identifier (e.g. Slide 1)", name: "title", widget: "string" }
-      - { label: "Display Order ID", name: "id", widget: "number", value_type: "int" }
-      - { label: "Image", name: "img", widget: "image" }
-      - { label: "Image Alt Text", name: "imgAlt", widget: "string" }
-      - { label: "User Comment", name: "userComment", widget: "text" }
-      - { label: "User Avatar", name: "userAvatar", widget: "image" }
 
-  - name: products
-    label: Products / Featured Items
-    folder: src/content/products
+  - name: features
+    label: Features / Cards
+    folder: src/content/features
     create: true
     format: frontmatter
     fields:
-      - { label: "Item Name", name: "title", widget: "string" }
+      - { label: "Feature Title", name: "title", widget: "string" }
       - { label: "Image", name: "image", widget: "image" }
       - { label: "Image Alt Text", name: "alt", widget: "string" }
       - { label: "Category / Type (e.g. Main course 🥘)", name: "type", widget: "string" }
@@ -43,53 +32,73 @@ collections:
       - { label: "Rating (1 to 5)", name: "rating", widget: "number", value_type: "float", min: 1, max: 5, step: 0.5 }
       - { label: "Review Content", name: "content", widget: "text" }
 
-  - name: articles
-    label: Articles / News
-    folder: src/content/articles
+  - name: blog
+    label: Blog / News
+    folder: src/content/blog
     create: true
     format: frontmatter
     fields:
-      - { label: "Article Title", name: "title", widget: "string" }
+      - { label: "Post Title", name: "title", widget: "string" }
       - { label: "Featured Image", name: "img", widget: "image" }
       - { label: "Image Alt Text", name: "alt", widget: "string" }
       - { label: "Summary / Description", name: "description", widget: "text" }
       - { label: "Read More Link", name: "blogLink", widget: "string", default: "#" }
 
-  - name: pages
-    label: Pages
+  - name: sections
+    label: Sections
     files:
-      - name: home
-        label: Home Page Settings
-        file: src/content/pages/home.md
+      - name: hero
+        label: Hero Section
+        file: src/content/sections/hero.md
         format: frontmatter
         fields:
-          - label: Hero Headings
-            name: hero
-            widget: object
+          - { label: "Main Title", name: "title", widget: "string" }
+          - { label: "Subheading / Description", name: "description", widget: "text" }
+          - label: Hero Slides
+            name: slides
+            widget: list
             fields:
-              - { label: "Main Title", name: "title", widget: "string" }
-              - { label: "Subheading / Description", name: "description", widget: "text" }
-          - label: About Section
-            name: about
-            widget: object
+              - { label: "Slide Identifier (e.g. Slide 1)", name: "title", widget: "string" }
+              - { label: "Display Order ID", name: "id", widget: "number", value_type: "int" }
+              - { label: "Image", name: "img", widget: "image" }
+              - { label: "Image Alt Text", name: "imgAlt", widget: "string" }
+              - { label: "User Comment", name: "userComment", widget: "text" }
+              - { label: "User Avatar", name: "userAvatar", widget: "image" }
+
+      - name: about
+        label: About Section
+        file: src/content/sections/about.md
+        format: frontmatter
+        fields:
+          - { label: "Section Badge", name: "badge", widget: "string", default: "About Us" }
+          - { label: "Section Title", name: "title", widget: "string" }
+          - { label: "Section Description", name: "description", widget: "text" }
+          - { label: "Read More Link", name: "readMoreLink", widget: "string", default: "#" }
+          - { label: "About Image", name: "image", widget: "image" }
+          - label: Achievements Stats
+            name: stats
+            widget: list
             fields:
-              - { label: "Section Badge", name: "badge", widget: "string", default: "About Us" }
-              - { label: "Section Title", name: "title", widget: "string" }
-              - { label: "Section Description", name: "description", widget: "text" }
-              - { label: "Read More Link", name: "readMoreLink", widget: "string", default: "#" }
-              - { label: "About Image", name: "image", widget: "image" }
-              - label: Achievements Stats
-                name: stats
-                widget: list
-                fields:
-                  - { label: "Stat Value (e.g. 20+)", name: "value", widget: "string" }
-                  - { label: "Line 1 Description", name: "line1", widget: "string" }
-                  - { label: "Line 2 Description", name: "line2", widget: "string" }
-                  - label: Icon
-                    name: icon
-                    widget: select
-                    options: ["SparklesIcon", "ChefHat", "Users", "Trophy"]
-          - label: Contact Section
+              - { label: "Stat Value (e.g. 20+)", name: "value", widget: "string" }
+              - { label: "Line 1 Description", name: "line1", widget: "string" }
+              - { label: "Line 2 Description", name: "line2", widget: "string" }
+              - label: Icon
+                name: icon
+                widget: select
+                options: ["SparklesIcon", "ChefHat", "Users", "Trophy"]
+
+      - name: contact
+        label: Contact Section
+        file: src/content/sections/contact.md
+        format: frontmatter
+        fields:
+          - { label: "Section Badge", name: "badge", widget: "string", default: "Contact Us" }
+          - { label: "Section Title", name: "title", widget: "string", default: "Get in touch with us" }
+          - { label: "Section Description", name: "description", widget: "text", default: "We eagerly look forward to warmly welcoming you very soon to our event. It promises to be a memorable experience filled with exciting activities." }
+          - { label: "Section Image", name: "image", widget: "image", default: "/images/contact-us-01.webp" }
+          - { label: "Right Side Title", name: "rightTitle", widget: "string", default: "We're here to serve you" }
+          - { label: "Right Side Description", name: "rightDescription", widget: "text", default: "We would love to hear from you, Whether you have a question, need a reservation, or want to learn more about our offerings, we're here to assist." }
+          - label: Contact Cards
             name: contact
             widget: list
             fields:
@@ -99,7 +108,13 @@ collections:
                 name: icon
                 widget: select
                 options: ["Clock8Icon", "MapPinIcon", "Mail", "PhoneIcon"]
-          - label: Promotions Section
+
+      - name: promotions
+        label: Promotions Section
+        file: src/content/sections/promotions.md
+        format: frontmatter
+        fields:
+          - label: Promotions Banners
             name: promotions
             widget: list
             fields:
