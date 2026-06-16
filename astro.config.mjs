@@ -66,7 +66,33 @@ export default defineConfig({
     inlineStylesheets: 'auto'
   },
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [
+      tailwindcss(),
+      {
+        name: 'watch-public-folder',
+        configureServer(server) {
+          server.watcher.add('public/**/*')
+
+          const reload = () => {
+            if (server.hot && typeof server.hot.send === 'function') {
+              server.hot.send({ type: 'full-reload' })
+            } else if (server.ws && typeof server.ws.send === 'function') {
+              server.ws.send({ type: 'full-reload' })
+            }
+          }
+
+          server.watcher.on('change', (file) => {
+            if (file.includes('public')) reload()
+          })
+          server.watcher.on('add', (file) => {
+            if (file.includes('public')) reload()
+          })
+          server.watcher.on('unlink', (file) => {
+            if (file.includes('public')) reload()
+          })
+        }
+      }
+    ],
     build: {
       cssMinify: true,
       minify: 'esbuild'

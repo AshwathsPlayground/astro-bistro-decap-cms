@@ -75,6 +75,84 @@ import '@/styles/global.css'
         }
       };
 
+      // Component to render an image by resolving getAsset asynchronously
+      const AssetImage = createClass({
+        getInitialState: function() {
+          return { src: '' };
+        },
+        resolveAsset: function() {
+          const { getAsset, src } = this.props;
+          if (!src) {
+            this.setState({ src: '' });
+            return;
+          }
+          const srcStr = typeof src === 'string' ? src : String(src);
+          if (srcStr.startsWith('http://') || srcStr.startsWith('https://') || srcStr.startsWith('data:') || srcStr.startsWith('blob:')) {
+            this.setState({ src: srcStr });
+            return;
+          }
+          if (srcStr.includes('blob:')) {
+            const blobIndex = srcStr.indexOf('blob:');
+            this.setState({ src: srcStr.substring(blobIndex) });
+            return;
+          }
+
+          // Build a list of candidate path variants to try.
+          // This addresses mismatches between media_folder (repo path) and public_folder (URL path).
+          const pathsToTry = [srcStr];
+          if (srcStr.startsWith('/images/uploads/')) {
+            pathsToTry.push('public' + srcStr);
+          } else if (srcStr.startsWith('public/images/uploads/')) {
+            pathsToTry.push(srcStr.substring(6));
+          } else if (!srcStr.includes('/')) {
+            pathsToTry.push('public/images/uploads/' + srcStr);
+            pathsToTry.push('/images/uploads/' + srcStr);
+          }
+
+          const tryNext = (index) => {
+            if (index >= pathsToTry.length) {
+              // Fallback to original string if all lookups failed
+              this.setState({ src: srcStr });
+              return;
+            }
+            const currentPath = pathsToTry[index];
+            Promise.resolve(getAsset(currentPath)).then((res) => {
+              if (res) {
+                const resStr = res.toString();
+                if (resStr.includes('blob:')) {
+                  const blobIndex = resStr.indexOf('blob:');
+                  this.setState({ src: resStr.substring(blobIndex) });
+                } else if (resStr && resStr !== currentPath && !resStr.startsWith('/images/uploads/')) {
+                  this.setState({ src: resStr });
+                } else {
+                  tryNext(index + 1);
+                }
+              } else {
+                tryNext(index + 1);
+              }
+            }).catch(() => {
+              tryNext(index + 1);
+            });
+          };
+
+          tryNext(0);
+        },
+        componentDidMount: function() {
+          this.resolveAsset();
+        },
+        componentDidUpdate: function(prevProps) {
+          if (prevProps.src !== this.props.src) {
+            this.resolveAsset();
+          }
+        },
+        render: function() {
+          const { getAsset, src, ...rest } = this.props;
+          const resolvedSrc = this.state.src || src;
+          if (!resolvedSrc) return null;
+          return h('img', { ...rest, src: resolvedSrc });
+        }
+      });
+
       // 1. Hero Preview Component (Matches hero-section.tsx layout)
       const HeroPreview = createClass({
         getInitialState: function() {
@@ -91,6 +169,7 @@ import '@/styles/global.css'
           const title = entry.getIn(['data', 'title']) || 'Savor the taste of perfection';
           const description = entry.getIn(['data', 'description']) || '';
           const slides = entry.getIn(['data', 'slides'])?.toJS() || [];
+          const getAsset = this.props.getAsset;
 
           // Sort slides by ID to match actual site sorting logic
           const sortedSlides = slides.sort((a, b) => (a.id || 0) - (b.id || 0));
@@ -123,7 +202,7 @@ import '@/styles/global.css'
                 ),
                 // Right Column (Active Dish Showcase)
                 h('div', { className: 'w-full lg:col-span-2 flex items-center justify-center' },
-                  activeSlide.img && h('img', { src: activeSlide.img, alt: activeSlide.imgAlt, className: 'size-95 object-contain' })
+                  activeSlide.img && h(AssetImage, { getAsset, src: activeSlide.img, alt: activeSlide.imgAlt, className: 'size-95 object-contain' })
                 )
               ),
               // Bottom Grid
@@ -137,7 +216,7 @@ import '@/styles/global.css'
                         onClick: () => this.setState({ current: index }),
                         className: `flex-shrink-0 cursor-pointer p-1 border rounded-lg transition-all duration-300 ${index === current ? 'border-primary scale-105' : 'border-border'}`
                       },
-                        h('img', { src: slide.img, alt: slide.imgAlt, className: 'size-20 object-contain' })
+                        h(AssetImage, { getAsset, src: slide.img, alt: slide.imgAlt, className: 'size-20 object-contain' })
                       )
                     )
                   )
@@ -145,7 +224,7 @@ import '@/styles/global.css'
                 // Active Comment Box
                 h('div', { className: 'flex w-full items-center justify-center lg:col-span-2' },
                   h('div', { className: 'flex h-full min-h-14 w-full items-center justify-center gap-4 px-6 py-4 border rounded-none bg-card text-card-foreground shadow-sm' },
-                    activeSlide.userAvatar && h('img', { src: activeSlide.userAvatar, className: 'size-10 rounded-full object-cover border' }),
+                    activeSlide.userAvatar && h(AssetImage, { getAsset, src: activeSlide.userAvatar, className: 'size-10 rounded-full object-cover border' }),
                     h('div', { className: 'bg-primary hidden h-6 w-0.5 rounded-full sm:block' }),
                     h('p', { className: 'text-card-foreground text-sm' }, activeSlide.userComment)
                   )
@@ -171,6 +250,7 @@ import '@/styles/global.css'
           const description = entry.getIn(['data', 'description']) || '';
           const image = entry.getIn(['data', 'image']) || '/images/about-us.webp';
           const stats = entry.getIn(['data', 'stats'])?.toJS() || [];
+          const getAsset = this.props.getAsset;
 
           return h('section', { 
             id: 'about-us',
@@ -190,7 +270,7 @@ import '@/styles/global.css'
               ),
               // Body wrapper with image and overlapping stats
               h('div', { className: 'relative mb-8 h-full w-full sm:mb-16 lg:mb-24' },
-                h('img', { src: image, alt: 'About us illustration', className: 'h-full w-full max-h-96 object-cover' }),
+                h(AssetImage, { getAsset, src: image, alt: 'About us illustration', className: 'h-full w-full max-h-96 object-cover' }),
                 h('div', { 
                   className: 'bg-background grid gap-10 border p-8 sm:grid-cols-2 lg:absolute lg:-bottom-25 lg:left-1/2 lg:w-3/4 lg:-translate-x-1/2 lg:grid-cols-4 lg:px-10 shadow-lg' 
                 },
@@ -231,6 +311,7 @@ import '@/styles/global.css'
           const rightTitle = entry.getIn(['data', 'rightTitle']) || "We're here to serve you";
           const rightDescription = entry.getIn(['data', 'rightDescription']) || "We would love to hear from you, Whether you have a question, need a reservation, or want to learn more about our offerings, we're here to assist.";
           const contactList = entry.getIn(['data', 'contact'])?.toJS() || [];
+          const getAsset = this.props.getAsset;
 
           return h('section', { 
             id: 'contact-us',
@@ -245,7 +326,8 @@ import '@/styles/global.css'
               ),
               // Grid content
               h('div', { className: 'grid items-center gap-12 lg:grid-cols-2' },
-                h('img', { 
+                h(AssetImage, { 
+                  getAsset,
                   src: image, 
                   alt: 'Contact illustration', 
                   className: 'size-full object-cover max-lg:max-h-70' 
@@ -292,6 +374,7 @@ import '@/styles/global.css'
         render: function() {
           const entry = this.props.entry;
           const promotionsList = entry.getIn(['data', 'promotions'])?.toJS() || [];
+          const getAsset = this.props.getAsset;
 
           return h('section', { 
             id: 'offers', 
@@ -313,7 +396,8 @@ import '@/styles/global.css'
                     key: idx, 
                     className: `group relative overflow-hidden rounded-none ${promo.className || ''}` 
                   },
-                    h('img', { 
+                    h(AssetImage, { 
+                      getAsset,
                       src: promo.src, 
                       alt: promo.alt, 
                       className: 'h-full w-full object-cover transition-transform duration-300 hover:scale-105' 
@@ -349,11 +433,12 @@ import '@/styles/global.css'
           const alt = entry.getIn(['data', 'alt']) || '';
           const type = entry.getIn(['data', 'type']) || '';
           const description = entry.getIn(['data', 'description']) || '';
+          const getAsset = this.props.getAsset;
 
           return h('div', { className: 'p-8 max-w-sm mx-auto bg-background text-foreground' },
             h('div', { className: 'hover:border-primary border-primary/10 overflow-hidden rounded-none border py-0 shadow-none ring-0 transition-colors duration-300 bg-card text-card-foreground' },
               h('div', { className: 'bg-muted' },
-                h('img', { src: image, alt: alt, className: 'h-auto w-full' })
+                h(AssetImage, { getAsset, src: image, alt: alt, className: 'h-auto w-full' })
               ),
               h('div', { className: 'space-y-3 px-6 py-5' },
                 h('h3', { className: 'text-lg font-semibold' }, title),
@@ -382,13 +467,14 @@ import '@/styles/global.css'
           const avatar = entry.getIn(['data', 'avatar']) || '';
           const rating = entry.getIn(['data', 'rating']) || 5;
           const content = entry.getIn(['data', 'content']) || '';
+          const getAsset = this.props.getAsset;
 
           const stars = '★'.repeat(Math.round(rating)) + '☆'.repeat(5 - Math.round(rating));
 
           return h('div', { className: 'p-8 max-w-sm mx-auto bg-background text-foreground' },
             h('div', { className: 'hover:border-primary border-primary/10 h-full rounded-none border ring-0 transition-colors duration-300 bg-card text-card-foreground p-6 space-y-4' },
               h('div', { className: 'flex items-center gap-3' },
-                h('img', { src: avatar, alt: name, className: 'size-10 overflow-hidden rounded-full border object-cover' }),
+                h(AssetImage, { getAsset, src: avatar, alt: name, className: 'size-10 overflow-hidden rounded-full border object-cover' }),
                 h('div', { className: 'flex-1' },
                   h('h4', { className: 'text-base font-medium' }, name)
                 )
@@ -415,11 +501,12 @@ import '@/styles/global.css'
           const alt = entry.getIn(['data', 'alt']) || '';
           const description = entry.getIn(['data', 'description']) || '';
           const blogLink = entry.getIn(['data', 'blogLink']) || '#';
+          const getAsset = this.props.getAsset;
 
           return h('div', { className: 'p-8 max-w-sm mx-auto bg-background text-foreground' },
             h('div', { className: 'hover:border-primary border-primary/10 rounded-none border pt-0 shadow-none ring-0 transition-colors duration-300 bg-card text-card-foreground' },
               h('div', { className: 'px-0' },
-                h('img', { src: img, alt: alt, className: 'aspect-video h-60 w-full object-cover' })
+                h(AssetImage, { getAsset, src: img, alt: alt, className: 'aspect-video h-60 w-full object-cover' })
               ),
               h('div', { className: 'p-6 mb-2 gap-3 flex flex-col' },
                 h('h3', { className: 'text-xl font-semibold' },
