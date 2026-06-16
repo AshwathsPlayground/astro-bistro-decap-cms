@@ -16,7 +16,7 @@ collections:
     format: frontmatter
     fields:
       - { label: "Feature Title", name: "title", widget: "string" }
-      - { label: "Image", name: "image", widget: "image" }
+      - { label: "Image", name: "image", widget: "image", hint: "Max file size: 2MB. Web-optimized format (WEBP/PNG) recommended.", media_library: { config: { max_file_size: 2048000 } } }
       - { label: "Image Alt Text", name: "alt", widget: "string" }
       - { label: "Category / Type (e.g. Main course 🥘)", name: "type", widget: "string" }
       - { label: "Description", name: "description", widget: "text" }
@@ -28,7 +28,7 @@ collections:
     format: frontmatter
     fields:
       - { label: "Customer Name", name: "title", widget: "string" }
-      - { label: "Avatar Image", name: "avatar", widget: "image" }
+      - { label: "Avatar Image", name: "avatar", widget: "image", hint: "Max file size: 2MB. Square image in WEBP/PNG recommended.", media_library: { config: { max_file_size: 2048000 } } }
       - { label: "Rating (1 to 5)", name: "rating", widget: "number", value_type: "float", min: 1, max: 5, step: 0.5 }
       - { label: "Review Content", name: "content", widget: "text" }
 
@@ -39,7 +39,7 @@ collections:
     format: frontmatter
     fields:
       - { label: "Post Title", name: "title", widget: "string" }
-      - { label: "Featured Image", name: "img", widget: "image" }
+      - { label: "Featured Image", name: "img", widget: "image", hint: "Max file size: 2MB. Web-optimized format (WEBP/PNG) recommended.", media_library: { config: { max_file_size: 2048000 } } }
       - { label: "Image Alt Text", name: "alt", widget: "string" }
       - { label: "Summary / Description", name: "description", widget: "text" }
       - { label: "Read More Link", name: "blogLink", widget: "string", default: "#" }
@@ -60,10 +60,10 @@ collections:
             fields:
               - { label: "Slide Identifier (e.g. Slide 1)", name: "title", widget: "string" }
               - { label: "Display Order ID", name: "id", widget: "number", value_type: "int" }
-              - { label: "Image", name: "img", widget: "image" }
+              - { label: "Image", name: "img", widget: "image", hint: "Max file size: 2MB. Web-optimized format (WEBP/PNG) recommended.", media_library: { config: { max_file_size: 2048000 } } }
               - { label: "Image Alt Text", name: "imgAlt", widget: "string" }
               - { label: "User Comment", name: "userComment", widget: "text" }
-              - { label: "User Avatar", name: "userAvatar", widget: "image" }
+              - { label: "User Avatar", name: "userAvatar", widget: "image", hint: "Max file size: 2MB. Square avatar in WEBP/PNG recommended.", media_library: { config: { max_file_size: 2048000 } } }
 
       - name: about
         label: About Section
@@ -74,7 +74,7 @@ collections:
           - { label: "Section Title", name: "title", widget: "string" }
           - { label: "Section Description", name: "description", widget: "text" }
           - { label: "Read More Link", name: "readMoreLink", widget: "string", default: "#" }
-          - { label: "About Image", name: "image", widget: "image" }
+          - { label: "About Image", name: "image", widget: "image", hint: "Max file size: 2MB. High resolution WEBP/PNG recommended.", media_library: { config: { max_file_size: 2048000 } } }
           - label: Achievements Stats
             name: stats
             widget: list
@@ -95,7 +95,7 @@ collections:
           - { label: "Section Badge", name: "badge", widget: "string", default: "Contact Us" }
           - { label: "Section Title", name: "title", widget: "string", default: "Get in touch with us" }
           - { label: "Section Description", name: "description", widget: "text", default: "We eagerly look forward to warmly welcoming you very soon to our event. It promises to be a memorable experience filled with exciting activities." }
-          - { label: "Section Image", name: "image", widget: "image", default: "/images/contact-us-01.webp" }
+          - { label: "Section Image", name: "image", widget: "image", default: "/images/contact-us-01.webp", hint: "Max file size: 2MB. Web-optimized format (WEBP/PNG) recommended.", media_library: { config: { max_file_size: 2048000 } } }
           - { label: "Right Side Title", name: "rightTitle", widget: "string", default: "We're here to serve you" }
           - { label: "Right Side Description", name: "rightDescription", widget: "text", default: "We would love to hear from you, Whether you have a question, need a reservation, or want to learn more about our offerings, we're here to assist." }
           - label: Contact Cards
@@ -118,7 +118,7 @@ collections:
             name: promotions
             widget: list
             fields:
-              - { label: "Promo Image", name: "src", widget: "image" }
+              - { label: "Promo Image", name: "src", widget: "image", hint: "Max file size: 2MB. Web-optimized format (WEBP/PNG) recommended.", media_library: { config: { max_file_size: 2048000 } } }
               - { label: "Alt Text", name: "alt", widget: "string" }
               - { label: "Grid Size Class", name: "className", widget: "select", options: ["col-span-2 row-span-2", "col-span-2 max-h-60"] }
               - label: Promo Title Text
