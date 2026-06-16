@@ -77,6 +77,9 @@ import '@/styles/global.css'
 
       // 1. Hero Preview Component (Matches hero-section.tsx layout)
       const HeroPreview = createClass({
+        getInitialState: function() {
+          return { current: 0 };
+        },
         componentDidMount: function() {
           syncIframeStyles(this.props.document);
         },
@@ -91,7 +94,8 @@ import '@/styles/global.css'
 
           // Sort slides by ID to match actual site sorting logic
           const sortedSlides = slides.sort((a, b) => (a.id || 0) - (b.id || 0));
-          const activeSlide = sortedSlides[0] || { img: '', imgAlt: '', userAvatar: '', userComment: 'No slides configured.' };
+          const current = Math.min(this.state.current, Math.max(0, sortedSlides.length - 1));
+          const activeSlide = sortedSlides[current] || { img: '', imgAlt: '', userAvatar: '', userComment: 'No slides configured.' };
 
           return h('section', { 
             id: 'home',
@@ -130,7 +134,8 @@ import '@/styles/global.css'
                     sortedSlides.map((slide, index) => 
                       h('div', { 
                         key: index, 
-                        className: `flex-shrink-0 cursor-pointer p-1 border rounded-lg transition-all duration-300 ${index === 0 ? 'border-primary scale-105' : 'border-border'}`
+                        onClick: () => this.setState({ current: index }),
+                        className: `flex-shrink-0 cursor-pointer p-1 border rounded-lg transition-all duration-300 ${index === current ? 'border-primary scale-105' : 'border-border'}`
                       },
                         h('img', { src: slide.img, alt: slide.imgAlt, className: 'size-20 object-contain' })
                       )
