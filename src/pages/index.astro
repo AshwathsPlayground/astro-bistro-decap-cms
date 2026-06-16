@@ -20,12 +20,23 @@ import { newItems as defaultNewItems } from '@/assets/data/new-items'
 import { contactInfo as defaultContactInfo } from '@/assets/data/contact-us'
 import { GalleryImage as defaultGalleryImage } from '@/assets/data/offers'
 
-// Fetch sections content from separate files in parallel
-const [heroEntry, aboutEntry, contactEntry, promotionsEntry] = await Promise.all([
+// Fetch sections and collections content in parallel to avoid waterfalls
+const [
+  heroEntry,
+  aboutEntry,
+  contactEntry,
+  promotionsEntry,
+  productsRaw,
+  testimonialsRaw,
+  blogRaw
+] = await Promise.all([
   getEntry('sections', 'hero'),
   getEntry('sections', 'about'),
   getEntry('sections', 'contact'),
-  getEntry('sections', 'promotions')
+  getEntry('sections', 'promotions'),
+  getCollection('features'),
+  getCollection('testimonials'),
+  getCollection('blog')
 ])
 
 // Fetch dynamic slides content directly from combined hero entry, falling back to original static list
@@ -43,7 +54,6 @@ const menudata = slidesRaw.length > 0
   : defaultMenudata
 
 // Fetch dynamic features, falling back to original static list
-const productsRaw = await getCollection('features')
 const popularDishes = productsRaw.length > 0
   ? productsRaw.map(product => ({
       name: product.data.title,
@@ -55,7 +65,6 @@ const popularDishes = productsRaw.length > 0
   : defaultPopularDishes
 
 // Fetch dynamic testimonials, falling back to original static list
-const testimonialsRaw = await getCollection('testimonials')
 const testimonials = testimonialsRaw.length > 0
   ? testimonialsRaw.map(t => ({
       name: t.data.title,
@@ -66,7 +75,6 @@ const testimonials = testimonialsRaw.length > 0
   : defaultTestimonials
 
 // Fetch dynamic blog posts, falling back to original static list
-const blogRaw = await getCollection('blog')
 const newItems = blogRaw.length > 0
   ? blogRaw.map(item => ({
       img: item.data.img,
