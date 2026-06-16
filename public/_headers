@@ -11,7 +11,7 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
 
   # Content Security Policy (allows Netlify Identity Widget)
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://identity.netlify.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' blob: https://api.github.com https://identity.netlify.com; frame-src 'self' about: https://identity.netlify.com; frame-ancestors 'self' https://identity.netlify.com; base-uri 'self'; form-action 'self'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://identity.netlify.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://api.github.com https://identity.netlify.com; frame-src 'self' about: https://identity.netlify.com; frame-ancestors 'self' https://identity.netlify.com; base-uri 'self'; form-action 'self'
 
   # Performance & SEO
   X-DNS-Prefetch-Control: on
