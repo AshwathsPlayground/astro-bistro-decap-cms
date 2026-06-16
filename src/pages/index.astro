@@ -169,12 +169,12 @@ const schema = {
   <Testimonials testimonials={testimonials} client:load />
   <NewItems newItems={newItems} />
   <ContactUs 
-    badge={contactEntry?.data.badge}
-    title={contactEntry?.data.title}
-    description={contactEntry?.data.description}
-    image={contactEntry?.data.image}
-    rightTitle={contactEntry?.data.rightTitle}
-    rightDescription={contactEntry?.data.rightDescription}
+    badge={contactEntry?.data.badge ?? "Contact Us"}
+    title={contactEntry?.data.title ?? "Get in touch with us"}
+    description={contactEntry?.data.description ?? "We eagerly look forward to warmly welcoming you very soon to our event. It promises to be a memorable experience filled with exciting activities."}
+    image={contactEntry?.data.image ?? "/images/contact-us-01.webp"}
+    rightTitle={contactEntry?.data.rightTitle ?? "We're here to serve you"}
+    rightDescription={contactEntry?.data.rightDescription ?? "We would love to hear from you, Whether you have a question, need a reservation, or want to learn more about our offerings, we're here to assist."}
     contactInfo={contactInfo} 
   />
   <Offers galleryImage={galleryImage} />
