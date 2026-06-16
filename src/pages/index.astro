@@ -11,15 +11,35 @@ import Offers from '@/components/blocks/offers-section/offers-section'
 import { getCollection, getEntry } from 'astro:content'
 import { iconMap } from '@/utils/icons'
 
-// Fetch sections content from separate files in parallel
-const [heroEntry, aboutEntry, contactEntry, promotionsEntry] = await Promise.all([
+// Import original template static data as fallbacks
+import { menudata as defaultMenudata } from '@/assets/data/hero'
+import { popularDishes as defaultPopularDishes } from '@/assets/data/popular-dishes'
+import { stats as defaultStats } from '@/assets/data/about-us'
+import { testimonials as defaultTestimonials } from '@/assets/data/testimonials'
+import { newItems as defaultNewItems } from '@/assets/data/new-items'
+import { contactInfo as defaultContactInfo } from '@/assets/data/contact-us'
+import { GalleryImage as defaultGalleryImage } from '@/assets/data/offers'
+
+// Fetch sections and collections content in parallel to avoid waterfalls
+const [
+  heroEntry,
+  aboutEntry,
+  contactEntry,
+  promotionsEntry,
+  productsRaw,
+  testimonialsRaw,
+  blogRaw
+] = await Promise.all([
   getEntry('sections', 'hero'),
   getEntry('sections', 'about'),
   getEntry('sections', 'contact'),
-  getEntry('sections', 'promotions')
+  getEntry('sections', 'promotions'),
+  getCollection('features'),
+  getCollection('testimonials'),
+  getCollection('blog')
 ])
 
-// Fetch dynamic slides content directly from combined hero entry
+// Fetch dynamic slides content directly from combined hero entry, falling back to original static list
 const slidesRaw = heroEntry?.data.slides ?? []
 const menudata = slidesRaw.length > 0
   ? slidesRaw
@@ -31,28 +51,20 @@ const menudata = slidesRaw.length > 0
         userComment: slide.userComment
       }))
       .sort((a, b) => a.id - b.id)
-  : [
-      {
-        id: 1,
-        img: '/images/hero-section/dish-01.webp',
-        imgAlt: 'default-plate-1',
-        userAvatar: '/images/hero-section/avatar-01.webp',
-        userComment: 'No slides configured. Add slides in /admin/index.html!'
-      }
-    ]
+  : defaultMenudata
 
-// Fetch dynamic products content
-const productsRaw = await getCollection('features')
-const popularDishes = productsRaw.map(product => ({
-  name: product.data.title,
-  image: product.data.image,
-  alt: product.data.alt,
-  type: product.data.type,
-  description: product.data.description
-}))
+// Fetch dynamic features, falling back to original static list
+const popularDishes = productsRaw.length > 0
+  ? productsRaw.map(product => ({
+      name: product.data.title,
+      image: product.data.image,
+      alt: product.data.alt,
+      type: product.data.type,
+      description: product.data.description
+    }))
+  : defaultPopularDishes
 
-// Fetch dynamic testimonials content
-const testimonialsRaw = await getCollection('testimonials')
+// Fetch dynamic testimonials, falling back to original static list
 const testimonials = testimonialsRaw.length > 0
   ? testimonialsRaw.map(t => ({
       name: t.data.title,
@@ -60,10 +72,9 @@ const testimonials = testimonialsRaw.length > 0
       rating: t.data.rating,
       content: t.data.content
     }))
-  : []
+  : defaultTestimonials
 
-// Fetch dynamic blog post content
-const blogRaw = await getCollection('blog')
+// Fetch dynamic blog posts, falling back to original static list
 const newItems = blogRaw.length > 0
   ? blogRaw.map(item => ({
       img: item.data.img,
@@ -72,7 +83,7 @@ const newItems = blogRaw.length > 0
       description: item.data.description,
       blogLink: item.data.blogLink
     }))
-  : []
+  : defaultNewItems
 
 const heroData = {
   title: heroEntry?.data.title ?? "Savor the taste of perfection",
@@ -88,90 +99,30 @@ const aboutData = {
   stats: aboutEntry?.data.stats ?? []
 }
 
-// Map stats dynamic Lucide React icons
+// Map stats dynamic Lucide React icons, falling back to original static list
 const stats = aboutData.stats && aboutData.stats.length > 0
   ? aboutData.stats.map(stat => ({
       value: stat.value,
       description: [stat.line1, stat.line2],
       icon: iconMap[stat.icon] ?? iconMap.Trophy
     }))
-  : []
+  : defaultStats
 
-// Fetch dynamic contact info
-const contactInfoData = contactEntry?.data.contact ?? [
-  {
-    title: 'Open Hours',
-    icon: 'Clock8Icon',
-    description: 'Monday-Friday\n8:00 am to 5:00 pm'
-  },
-  {
-    title: 'Our Address',
-    icon: 'MapPinIcon',
-    description: '802 Perston Rd,Maine\n96812, USA'
-  },
-  {
-    title: 'Email',
-    icon: 'Mail',
-    description: 'info@seliziakitchen.com'
-  },
-  {
-    title: 'Phone',
-    icon: 'PhoneIcon',
-    description: '+1 (123) 456-7890'
-  }
-]
+// Fetch dynamic contact info, falling back to original static list
+const contactInfoData = contactEntry?.data.contact
+const contactInfo = contactInfoData && contactInfoData.length > 0
+  ? contactInfoData.map(info => ({
+      title: info.title,
+      description: info.description,
+      icon: iconMap[info.icon] ?? iconMap.PhoneIcon
+    }))
+  : defaultContactInfo
 
-const contactInfo = contactInfoData.map(info => ({
-  title: info.title,
-  description: info.description,
-  icon: iconMap[info.icon] ?? iconMap.PhoneIcon
-}))
-
-// Fetch dynamic promotions content
-const galleryImage = promotionsEntry?.data.promotions ?? [
-  {
-    src: '/images/offers/offers-image-01.webp',
-    alt: 'Launch deal',
-    className: 'col-span-2 row-span-2',
-    offerText: {
-      text: 'Lunch Deal - $9.99',
-      className: 'xl:top-6 xl:right-6 top-3 right-3'
-    },
-    offerButton: {
-      text: 'Book your table',
-      link: '#',
-      className: 'xl:top-19.5 xl:right-6 top-12 right-3'
-    }
-  },
-  {
-    src: '/images/offers/offers-image-02.webp',
-    alt: 'Bogo special',
-    className: 'col-span-2 max-h-60',
-    offerText: {
-      text: 'BOGO Special',
-      className: 'xl:bottom-18.5 xl:left-4 bottom-13 left-3'
-    },
-    offerButton: {
-      text: 'Claim offer',
-      link: '#',
-      className: 'xl:bottom-5 xl:left-4 bottom-2 left-3'
-    }
-  },
-  {
-    src: '/images/offers/offers-image-03.webp',
-    alt: 'Family meal',
-    className: 'col-span-2 max-h-60',
-    offerText: {
-      text: 'Family Meal – $29.99',
-      className: 'xl:top-5 xl:right-12 top-3 right-3'
-    },
-    offerButton: {
-      text: 'Book your table',
-      link: '#',
-      className: 'xl:top-19 xl:right-12 top-11 right-3'
-    }
-  }
-]
+// Fetch dynamic promotions, falling back to original static list
+const promotions = promotionsEntry?.data.promotions
+const galleryImage = promotions && promotions.length > 0
+  ? promotions
+  : defaultGalleryImage
 
 // Page-specific SEO configuration
 const pageTitle = ''
@@ -206,59 +157,24 @@ const schema = {
     menudata={menudata} 
     client:load 
   />
-  {popularDishes.length > 0 ? (
-    <PopularDishes popularDishes={popularDishes} client:load />
-  ) : (
-    import.meta.env.DEV && (
-      <div class="py-8 text-center text-muted-foreground border border-dashed rounded-md mx-auto max-w-7xl my-8">
-        <p>No products configured. Go to <a href="/admin/index.html" class="underline font-semibold text-primary">/admin</a> to add some!</p>
-      </div>
-    )
-  )}
-  
-  {stats.length > 0 ? (
-    <AboutUs 
-      badge={aboutData.badge}
-      title={aboutData.title}
-      description={aboutData.description}
-      readMoreLink={aboutData.readMoreLink}
-      image={aboutData.image}
-      stats={stats} 
-    />
-  ) : (
-    import.meta.env.DEV && (
-      <div class="py-8 text-center text-muted-foreground border border-dashed rounded-md mx-auto max-w-7xl my-8">
-        <p>No stats configured for About section. Go to <a href="/admin/index.html" class="underline font-semibold text-primary">/admin</a> to add stats!</p>
-      </div>
-    )
-  )}
-  
-  {testimonials.length > 0 ? (
-    <Testimonials testimonials={testimonials} client:load />
-  ) : (
-    import.meta.env.DEV && (
-      <div class="py-8 text-center text-muted-foreground border border-dashed rounded-md mx-auto max-w-7xl my-8">
-        <p>No testimonials configured. Go to <a href="/admin/index.html" class="underline font-semibold text-primary">/admin</a> to add testimonials!</p>
-      </div>
-    )
-  )}
-  
-  {newItems.length > 0 ? (
-    <NewItems newItems={newItems} />
-  ) : (
-    import.meta.env.DEV && (
-      <div class="py-8 text-center text-muted-foreground border border-dashed rounded-md mx-auto max-w-7xl my-8">
-        <p>No blog posts configured. Go to <a href="/admin/index.html" class="underline font-semibold text-primary">/admin</a> to add posts!</p>
-      </div>
-    )
-  )}
+  <PopularDishes popularDishes={popularDishes} client:load />
+  <AboutUs 
+    badge={aboutData.badge}
+    title={aboutData.title}
+    description={aboutData.description}
+    readMoreLink={aboutData.readMoreLink}
+    image={aboutData.image}
+    stats={stats} 
+  />
+  <Testimonials testimonials={testimonials} client:load />
+  <NewItems newItems={newItems} />
   <ContactUs 
-    badge={contactEntry?.data.badge}
-    title={contactEntry?.data.title}
-    description={contactEntry?.data.description}
-    image={contactEntry?.data.image}
-    rightTitle={contactEntry?.data.rightTitle}
-    rightDescription={contactEntry?.data.rightDescription}
+    badge={contactEntry?.data.badge ?? "Contact Us"}
+    title={contactEntry?.data.title ?? "Get in touch with us"}
+    description={contactEntry?.data.description ?? "We eagerly look forward to warmly welcoming you very soon to our event. It promises to be a memorable experience filled with exciting activities."}
+    image={contactEntry?.data.image ?? "/images/contact-us-01.webp"}
+    rightTitle={contactEntry?.data.rightTitle ?? "We're here to serve you"}
+    rightDescription={contactEntry?.data.rightDescription ?? "We would love to hear from you, Whether you have a question, need a reservation, or want to learn more about our offerings, we're here to assist."}
     contactInfo={contactInfo} 
   />
   <Offers galleryImage={galleryImage} />
