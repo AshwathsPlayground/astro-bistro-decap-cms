@@ -119,8 +119,9 @@ const contactInfo = contactInfoData && contactInfoData.length > 0
   : defaultContactInfo
 
 // Fetch dynamic promotions, falling back to original static list
-const galleryImage = promotionsEntry?.data.promotions && promotionsEntry?.data.promotions.length > 0
-  ? promotionsEntry.data.promotions
+const promotions = promotionsEntry?.data.promotions
+const galleryImage = promotions && promotions.length > 0
+  ? promotions
   : defaultGalleryImage
 
 // Page-specific SEO configuration
